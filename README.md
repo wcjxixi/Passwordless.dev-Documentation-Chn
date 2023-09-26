@@ -1,6 +1,6 @@
 # 关于
 
-这里是 Bitwarden 官方 [Passwordless.dev Documentation](https://docs.passwordless.dev/) 的中文翻译版，并参考了 Github 上的 [passwordless / docs](https://github.com/passwordless/docs) 仓库。
+这里是对 Bitwarden 官方 [Passwordless.dev Documentation](https://docs.passwordless.dev/) 的中文翻译，并参考了 Github 上的 [passwordless / docs](https://github.com/passwordless/docs) 仓库。
 
 译者：[@wcjxixi](mailto:wcjxixi@gmail.com)
 
