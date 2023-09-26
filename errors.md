@@ -4,7 +4,7 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/errors.html)
 {% endhint %}
 
-## 问题详情 <a href="#problem-details" id="problem-details"></a>
+## 问题信息详细 <a href="#problem-details" id="problem-details"></a>
 
 ### 如何查看客户端的错误？ <a href="#how-do-i-see-errors-on-the-client-side" id="how-do-i-see-errors-on-the-client-side"></a>
 
