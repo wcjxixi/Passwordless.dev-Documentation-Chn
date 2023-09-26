@@ -67,7 +67,7 @@ const { token } = await fetch(apiUrl + "/register", {
 | `discoverable`      | 如果为 `true`，则创建客户端可发现凭据，无需用户名即可登录。                                                                                               | `true`（默认）                               |
 | `userVerification`  | 允许在身份验证时选择用户验证的首选项（生物识别、PIN 码等），可以是 `"preferred"`（默认）、`"required"` 或 `"discouraged"`。                                           | `"preferred"`                            |
 | `expiresAt`         | 注册令牌到期的时间戳 (UTC)。默认为当前时间 +120 秒。                                                                                                | `"3023-08-01T14:43:03Z"`                 |
-| `aliases`           | userId 的别名数组，例如电子邮件或用户名。用于使用 `signinWithAlias()` 方法在客户端发起登录。别名必须与 userId 对应。默认为空数组 `[]`。                                        | `["pjfry@passwordless.dev"]`             |
+| `aliases`           | userId 的别名数组，例如电子邮件或用户名。用于使用 `signinWithAlias()` 方法在客户端发起登录。别名对于 userId 必须是唯一的。默认为空数组 `[]`。                                     | `["pjfry@passwordless.dev"]`             |
 | `aliasHashing`      | 别名在存储之前是否应进行哈希处理。默认为 `true`。                                                                                                    | `true`                                   |
 
 ### 响应 <a href="#response" id="response"></a>
@@ -84,24 +84,210 @@ const { token } = await fetch(apiUrl + "/register", {
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 `/signin` 端点发出的 `POST` 请求会解压[验证令牌](concepts.md#tokens)，该令牌必须通过在前端调用 `.signinWith*()` 方法来生成（[了解更多](frontend/javascript.md#signinwith)）并包含在请求正文中，例如：
+
+{% tabs %}
+{% tab title="HTTP" %}
+```http
+POST https://v4.passwordless.dev/signin/verify HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "token": "d5vzCkL_GvpS4VYtoT3..."
+}
+```
+{% endtab %}
+
+{% tab title="JavaScript" %}
+```javascript
+const apiUrl = "https://v4.passwordless.dev";
+
+// 从前端获取验证令牌。
+const token = { token: req.query.token };
+
+// 使用您的 API 私有机密将验证令牌 POST 到 Passwordless.dev API。
+const response = await fetch(apiUrl + "/signin/verify", {
+    method: "POST",
+    body: JSON.stringify({token}),
+    headers: { "ApiSecret": "myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4", "Content-Type": "application/json" }
+});
+```
+{% endtab %}
+{% endtabs %}
+
+Passwordless.dev 私有 API 将解压验证令牌以检查其合法性。
+
 ### 响应 <a href="#response" id="response"></a>
+
+成功后，`/signin/verify` 端点将返回一个成功的响应对象，例如：
+
+```json
+{
+  "success": true,
+  "userId": "123",
+  "timestamp": "3023-08-01T14:43:03Z",
+  "rpid": "localhost",
+  "origin": "http://localhost:3000",
+  "device": "Firefox, Windows 10",
+  "country": "SE",
+  "nickname": "My Work Phone",
+  "expiresAt": "3023-08-01T14:43:03Z",
+  "tokenId": "TODO",
+  "type": "passkey_signin" // or passkey_register  
+}
+```
+
+使用 `.success` 值（`true` 或 `false`）确定下一步操作，即是否完成登录（[了解更多](frontend/javascript.md#signinwith)）。
 
 ## /alias <a href="#alias" id="alias"></a>
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 `/alias` 端点发出的 `POST` 请求会根据他们的 `userId` 向用户添加别名（[了解更多](concepts.md#user-verification)），以便允许使用其他用户名、电子邮件地址等登录。
+
+请求正文**必须包含**用户的 userId 和**完整的**别名数组，因为发出 `POST` 请求时预先存在的别名将被覆盖，例如：
+
+{% tabs %}
+{% tab title="HTTP" %}
+```http
+POST https://v4.passwordless.dev/alias HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{ "userId": "107fb578-9559-4540-a0e2-f82ad78852f7", "aliases": ["pjfry@passwordless.dev", "benderrules@passwordless.dev"], "hashing": true }
+```
+{% endtab %}
+
+{% tab title="JavaScript" %}
+```javascript
+const apiUrl = "https://v4.passwordless.dev";
+
+// 获取用户现有的和新的别名数组。
+const payload = {
+    "userId": "107fb578-9559-4540-a0e2-f82ad78852f7",
+    "aliases": ["pjfry@passwordless.dev", "benderrules@passwordless.dev"],
+    "hashing": true // 存储前是否对别名进行哈希处理，默认为 true。
+};
+
+// 使用您的 API 私有机密将数组发 POST 到 Passwordless.dev API。
+await fetch(apiUrl + "/alias", {
+    "method": "POST",
+    "body": JSON.stringify(payload),
+    "headers": { "ApiSecret": "myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4", "Content-Type": "application/json"}
+});
+```
+{% endtab %}
+{% endtabs %}
+
+{% hint style="success" %}
+默认情况下，`"hashing": true` 将在存储别名之前打开，以对其进行哈希处理。您将无法在管理控制台中查看已哈希的别名。
+{% endhint %}
+
+允许用户创建别名时需要考虑的一些规则：
+
+* 别名对于指定的 `userId` 必须是唯一的。
+* 别名不得超过 250 个字符。
+* 一个 `userId` 最多可以有 10 个与其关联的别名。
+
 ### 响应 <a href="#response" id="response"></a>
+
+任何 API 响应中都不会返回别名，并且可以对其进行哈希处理以保护用户隐私（见上文）。成功后，`/alias` 端点将返回 HTTP 200 OK [状态代码](api.md#status-codes)。
 
 ## /credentials/list <a href="#credentials-list" id="credentials-list"></a>
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 /`credentials/list` 端点发出的 `GET` 请求会列出与用户关联的所有[已注册凭据](concepts.md#credential)（由 `userId` 指定）。请求**必须包含**相关的 `userId`，例如：
+
+{% tabs %}
+{% tab title="HTTP" %}
+```http
+GET https://v4.passwordless.dev/credentials/list?userId=107fb578-9559-4540-a0e2-f82ad78852f7 HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+```
+{% endtab %}
+
+{% tab title="JavaScript" %}
+```javascript
+const apiUrl = "https://v4.passwordless.dev";
+
+// 获取相关用户的 userId。
+const payload = {
+    "userId": "107fb578-9559-4540-a0e2-f82ad78852f7"
+};
+
+// 使用您的 API 私有机密将 userId POST 到 Passwordless.dev API。
+const credentials = await fetch(apiUrl + "/credentials/list", {
+    "method": "POST",
+    "body": JSON.stringify(payload),
+    "headers": { "ApiSecret": "myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4", "Content-Type": "application/json"}
+}).then(r => r.json());
+```
+{% endtab %}
+{% endtabs %}
+
 ### 响应 <a href="#response" id="response"></a>
+
+成功后， `/credentials/list` 端点将返回 `.json` 对象数组，其中每个对象代表一个[已注册的凭据](concepts.md#credential)：
+
+```json
+[
+    {
+        "descriptor": {
+            "type": "public-key",
+            "id": "2mgrJ6LPItfxbnVc2UgFPHowNGKaYBm3Pf4so1bsXSk"
+        },
+        "publicKey": "pQECAyYgASFYIPi4M0A+ZFeyOHEC9iMe6dVhFnmOZdgac3MRmfqVpZ0AIlggWZ+l6+5rOGckXAsJ8i+mvPm4YuRQYDTHiJhIauagX4Q=",
+        "userHandle": "YzhhMzJlNWItNDZkMy00ODA4LWFlMTAtMTZkM2UyNmZmNmY5",
+        "signatureCounter": 0,        
+        "createdAt": "2023-04-21T13:33:50.0764103",
+        "aaGuid": "adce0002-35bc-c60a-648b-0b25f1f05503",
+        "lastUsedAt": "2023-04-21T13:33:50.0764103",
+        "rpid": "myapp.example.com",
+        "origin": "https://myapp.example.com",
+        "country": "US",
+        "device": "Chrome, Mac OS X 10",
+        "nickname": "Fred's Macbook Pro 2",
+        "userId": "c8a32e5b-46d3-4808-ae10-16d3e26ff6f9"
+    },
+    ...
+]
+```
+
+[详细了解这些键值对的含义](concepts.md#credential)。
 
 ## /credentials/delete <a href="#credentials-delete" id="credentials-delete"></a>
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 `/credentials/delete` 端点发出的 `POST` 请求会删除与用户关联的特定凭证（由 `credentialId` 指定）。该请求**必须包含**相关的 `credentialId`，例如：
+
+```http
+POST https://v4.passwordless.dev/credentials/delete HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+    "credentialId":"qgB2ZetBhi0rIcaQK8_HrLQzXXfwKia46_PNjUC2L_w"
+}
+```
+
 ### 响应 <a href="#response" id="response"></a>
 
-### 状态代码 <a href="#status-codes" id="status-codes"></a>
+成功后，`/credentials/delete` 端点将返回 HTTP 200 OK [状态代码](api.md#status-codes)。
+
+## 状态代码 <a href="#status-codes" id="status-codes"></a>
+
+API 会为每一个请求返回 HTTP 状态代码。
+
+如果您收到错误，您还将收到[问题详细信息](errors.md#problem-details)形式的 JSON 序列化的错误摘要。有关详细信息，请参阅[错误页面](errors.md)。
+
+| HTTP 代码 | 消息           | 状态 |
+| ------- | ------------ | -- |
+| 200     | 一切正常。        | ✅  |
+| 201     | 一切正常，但空空如也。  | ✅  |
+| 400     | 错误请求。        | 🔴 |
+| 401     | 您没有表明自己的身份。  | 🔴 |
+| 409     | 冲突（别名已被使用）。  | 🔴 |
+| 500     | 我们这边出了很大的问题。 | 🔴 |
