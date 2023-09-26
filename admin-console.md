@@ -48,7 +48,7 @@
 
 ## 管理员 <a href="#admins" id="admins"></a>
 
-**管理员**页面允许您邀请其他管理员加入您的 Passwordless.dev 组织，管理应用程序、计费等。所有管理员，包括曾创建过 Passwordless.dev 账户和任何应用程序的人，**拥有组织内平相同的权限**。
+**管理员**页面允许您邀请其他管理员加入您的 Passwordless.dev 组织，管理应用程序、计费等。所有管理员，包括曾创建过 Passwordless.dev 账户和任何应用程序的人，**拥有组织内相同的权限**。
 
 {% embed url="https://docs.passwordless.dev/assets/img/admin-page.43025c60.png" %}
 
