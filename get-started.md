@@ -109,7 +109,7 @@ const p = new Client({});
 // Node.js - 为此步骤编写的代码应在您的后端运行。
 
 const payload = {
-  "userId": "107fb578-9559-4540-a0e2-f82ad78852f7", // 必填。由您的应用程序生成的 WebAuthn 用户句柄。最大值 64 字节。
+  "userId": "107fb578-9559-4540-a0e2-f82ad78852f7", // 必填。WebAuthn 用户句柄，应由您的应用程序生成。最多 64 字节。
   "username": "pjfry@passwordless.dev", // 必填。由用户选择的，用于用户身份验证的人类可读的用户名。
   // ...有关更多选项，请参阅后端 API 参考中的 /register/token。
 };
@@ -136,7 +136,7 @@ const {token} = await fetch(apiUrl + "/register/token", {
 如果您的 API 请求失败，您将收到一个包含 `json` 格式的[问题详细信息](errors.md)的错误响应。
 {% endhint %}
 
-2、在前端，启动 WebAuthn 流程以使用生成的注册令牌创建和存储通行密钥（[了解更多](frontend/javascript.md)），例如：
+2、在前端，发起 WebAuthn 流程以使用已生成的注册令牌创建和存储通行密钥（[了解更多](frontend/javascript.md)），例如：
 
 <mark style="background-color:orange;">前端</mark>
 
