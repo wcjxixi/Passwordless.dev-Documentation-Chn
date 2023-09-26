@@ -45,7 +45,7 @@ const payload = {
   "aliasHashing": true // 别名在存储之前是否应进行哈希处理。默认为 true。
 };
 
-// 使用您的 API 私有密机密将 payload POST 到 Passwordless.dev API。
+// 使用您的 API 私有机密将 payload POST 到 Passwordless.dev API。
 const { token } = await fetch(apiUrl + "/register", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -170,7 +170,7 @@ const payload = {
     "hashing": true // 存储前是否对别名进行哈希处理，默认为 true。
 };
 
-// 使用您的 API 私有机密将数组发 POST 到 Passwordless.dev API。
+// 使用您的 API 私有机密将数组 POST 到 Passwordless.dev API。
 await fetch(apiUrl + "/alias", {
     "method": "POST",
     "body": JSON.stringify(payload),

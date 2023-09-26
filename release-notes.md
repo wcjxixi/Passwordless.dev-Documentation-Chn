@@ -8,7 +8,7 @@
 
 Bitwarden 很荣幸地宣布 Passwordless.dev 正式发布！GA 的改进包括：
 
-* 全新的[管理控制台](admin-console.md)，帮助您快速开始实施无密码、配置设置和监控用户。
+* 全新的[管理控制台](admin-console.md)，帮助您快速开始实施 Passwordless、配置设置和监控用户。
 * 对 [Javascript 客户端](frontend/javascript.md)和 [API](api.md) 的一系列更新。
 
 {% hint style="warning" %}

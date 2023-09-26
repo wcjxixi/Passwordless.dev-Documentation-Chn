@@ -179,7 +179,7 @@ if(token) {
 ```javascript
 // 为此步骤编写的代码应在您的前端运行。
 
-// 使用您的 API 公钥实例化无密码客户端。
+// 使用您的 API 公钥实例化 Passwordless 客户端。
 const p = new Client({
     apiKey: "myapplication:public:4364b1a49a404b38b843fe3697b803c8"
 });
