@@ -9,3 +9,7 @@
 {% hint style="danger" %}
 个人能力有限，具体请以官方 [Passwordless.dev Documentation](https://docs.passwordless.dev/) 页面为准。使用本内容所产生的一切后果，与 @wcjxixi 无关。Use at your own risk！！！
 {% endhint %}
+
+{% hint style="info" %}
+**备注：**标题前有 \* 的表示官方曾经有但现已移除的页面和/或分类，我将其保留仅作为参考之用。
+{% endhint %}
