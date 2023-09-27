@@ -94,7 +94,7 @@ if(error) {
 
 #### **解决方法** <a href="#solution" id="solution"></a>
 
-您需要为每个 userId. 使用唯一的别名。您可以通过调用 `/alias` 端点从现有用户中删除别名。[了解更多](api.md#alias)。
+您需要为每个 userId 使用唯一的别名。您可以通过调用 `/alias` 端点从现有用户中删除别名。[了解更多](api.md#alias)。
 
 ### missing\_token <a href="#missing-token" id="missing-token"></a>
 

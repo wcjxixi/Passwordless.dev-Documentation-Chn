@@ -146,7 +146,7 @@ Passwordless.dev 私有 API 将解压验证令牌以检查其合法性。
 
 向 `/alias` 端点发出的 `POST` 请求会根据他们的 `userId` 向用户添加别名（[了解更多](concepts.md#user-verification)），以便允许使用其他用户名、电子邮件地址等登录。
 
-请求正文**必须包含**用户的 userId 和**完整的**别名数组，因为发出 `POST` 请求时预先存在的别名将被覆盖，例如：
+请求正文**必须包含**用户的 `userId` 和**完整的**别名数组，因为发出 `POST` 请求时预先存在的别名将被覆盖，例如：
 
 {% tabs %}
 {% tab title="HTTP" %}
@@ -187,7 +187,7 @@ await fetch(apiUrl + "/alias", {
 允许用户创建别名时需要考虑的一些规则：
 
 * 别名对于指定的 `userId` 必须是唯一的。
-* 别名不得超过 250 个字符。
+* 别名长度不得超过 250 个字符。
 * 一个 `userId` 最多可以有 10 个与其关联的别名。
 
 ### 响应 <a href="#response" id="response"></a>
