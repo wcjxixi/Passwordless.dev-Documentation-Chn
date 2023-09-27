@@ -36,7 +36,7 @@ this._passwordlessClient = new PasswordlessClient('demo:secret:f831e39c29e64b77a
 
 ### 注册 <a href="#registration" id="registration"></a>
 
-例如，如果您有一个带有 'signup' 箭头功能的 'UserController.ts'。您可以如下所示注册一个新的令牌。
+例如，如果您有一个带有「signup」箭头功能的「UserController.ts」。您可以如下所示注册一个新的令牌。
 
 在注册令牌之前，您首先需要将新用户存储在数据库中并验证其是否成功。
 

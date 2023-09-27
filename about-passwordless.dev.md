@@ -21,5 +21,5 @@ Passwordless.dev 的架构由三个关键部分组成：
 Passwordless.dev 的所有代码都是[开源](https://github.com/passwordless)的。
 
 {% hint style="success" %}
-有关支持 Passwordless.dev 的原则的更多信息，请查看[概念](concepts.md)。如果您准备好开始使用 Passwordless.dev，请访问[入门](get-started.md)以获取分步说明。
+有关支持 Passwordless.dev 的原则的更多信息，请查看[概念](concepts.md)章节。如果您准备好开始使用 Passwordless.dev，请访问[入门](get-started.md)章节以获取分步骤的说明。
 {% endhint %}
