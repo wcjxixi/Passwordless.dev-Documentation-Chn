@@ -4,6 +4,8 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/concepts.html)
 {% endhint %}
 
+> \[**译者注**]：[CATP](https://en.wikipedia.org/wiki/Client\_to\_Authenticator\_Protocol)：Client to Authenticator Protocol（客户端到验证器协议）
+
 ## FIDO2 <a href="#fido2" id="fido2"></a>
 
 FIDO2 是万维网联盟 (W3C) 关于网络身份验证 (WebAuthn) 和客户端到验证器协议 (CTAP) 的标准规范。制定 FIDO 身份验证标准是为了提供比标准密码和 SMS 2FA 更安全的身份验证。使用 FIDO 身份验证标准可以提供一种安全的体验，让消费者更容易使用，让开发人员更容易实施。有关 FIDO 的更多信息，请访问 [FIDO Alliance](https://fidoalliance.org/fido2/)。
@@ -11,13 +13,13 @@ FIDO2 是万维网联盟 (W3C) 关于网络身份验证 (WebAuthn) 和客户端�
 FIDO2 由 **WebAuthn** 和 **CTAP** 两个标准化组件组成。这些标准的共同作用是创造一种安全的无密码体验。
 
 * **WebAuthn** - 是一种应用程序接口 (API)，可将依赖方连接到应用程序或登录系统。从实际意义上讲，WebAuthn 在网络和应用程序之间建立了一种简便的连接，允许进行无密码身份验证。点击[此处](https://www.yubico.com/resource/why-webauthn-matters/)了解有关 WebAuthn 的更多信息。
-* **CTAP2** - 客户端到验证器协议组件允许外部和便携式验证器（安全密钥）与客户端平台一起运行。FIDO CTAP2 负责外部因素（如安全密钥），通过验证器与网站或账户进行通信。
+* **CTAP2** - 客户端到验证器协议组件允许外部和便携式验证器（安全钥匙）与客户端平台一起运行。FIDO CTAP2 负责外部因素（如安全钥匙），通过验证器与网站或账户进行通信。
 
 为了符合 FIDO2 标准，Passwordless.dev 身份验证过程将同时采用 WebAuthn 和 CTAP2 标准。
 
 ### 通行密钥 <a href="#passkeys" id="passkeys"></a>
 
-通行密钥是密码的替代品，可以让用户在不同设备上更快、更方便、更安全地登录网站和应用程序。更确切地说，「通行密匙」是一个对消费者友好的术语，指的是一种可被发现的 FIDO 凭证，它可以通过同步实现跨设备的安全无密码登录，也可以作为设备绑定的通行密钥专用于单个硬件。
+通行密钥 (Passkey) 是密码的替代品，可以让用户在不同设备上更快、更方便、更安全地登录网站和应用程序。更确切地说，「通行密匙」是一个对消费者友好的术语，指的是一种可被发现的 FIDO 凭证，它可以通过同步实现跨设备的安全无密码登录，也可以作为设备绑定的通行密钥专用于单个硬件。
 
 当与设备绑定时，通行密钥还可以提供升级的认证功能。
 
@@ -82,11 +84,11 @@ FIDO2 身份验证器有两种类型：
 | `userId`           | 与特定用户账户关联的唯一标识符。它可用于检索有关用户的信息。例如 `123`。            |
 | `signatureCounter` | 使用此凭证进行身份验证的使用次数。                                  |
 | `createdAt`        | 为应用程序注册凭证的时间戳 (UTC)。                               |
-| `aaGuid`           | 身份验证器验证 GUID 是一个唯一标识符，用于在注册身份验证器时识别身份验证器。          |
+| `aaGuid`           | 身份验证器验证 GUID 是一个唯一标识符，用于在注册身份验证器时识别它。              |
 | `lastUsedAt`       | 证书最后一次用于应用程序身份验证的时间戳 (UTC)。                        |
 | `rpid`             | 为应用程序注册凭证的依赖方标识符。                                  |
 | `origin`           | 使用 API 的服务的域名或 IP 地址。                              |
-| `country`          | 表示凭证所在或注册地的国家代码。                                   |
+| `country`          | 表示凭证所在地或注册地的国家代码。                                  |
 | `device`           | 全权证书所在设备的设备信息，例如 `Chrome、Mac OS X 10`。             |
 | `nickname`         | 用户指定的与此特定凭据相关联的名称，例如 `My Macbook`。                 |
 
