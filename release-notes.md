@@ -14,11 +14,11 @@ Bitwarden 很荣幸地宣布 Passwordless.dev 正式可用！GA (General Availab
 * 对 [Javascript 客户端](frontend/javascript.md)和 [API](api.md) 的一系列更新。
 
 {% hint style="warning" %}
-**对于 Beta 版用户而言**，passwordless.dev 的 GA 版本包括对 API 的重大更改，这些更改将发布到全新服务中。所有 Beta 用户都应尽快[注册 GA 服务](release-notes.md)，并对实施进行以下更改：
+**对于 Beta 版用户而言**，passwordless.dev 的 GA 版本包含了对 API 的重大更改，这些更改将发布到全新服务中。所有 Beta 版用户都应尽快注册 GA 服务，并对实施进行以下更改：
 
 * 将现有的 API 密钥替换为新创建的密钥。
-* 将 Beta 服务 API URL 替换为 GA 服务 URL。
+* 将 Beta 版服务 API URL 替换为 GA 版服务 URL。
 * 根据文档更新您的[前端代码](frontend/javascript.md)和[后端代码](api.md)。
 
-目前尚不支持从 Beta 版到 GA 服务的数据迁移，但 Beta 服务将在 GA 发布后继续提供，以便您有时间进行手动迁移。
+目前尚不支持从 Beta 版到 GA 版服务的数据迁移，但 Beta 版服务将在 GA 版发布后继续提供，以便您有时间进行手动迁移。
 {% endhint %}
