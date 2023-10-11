@@ -4,6 +4,22 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/backend/java.html)
 {% endhint %}
 
+
+
+入门
+
+示例
+
+#### 创建 `PasswordlessClient` 实例： <a href="#create-passwordlessclient-instance" id="create-passwordlessclient-instance"></a>
+
+注册通行密钥
+
+验证用户
+
+定制化
+
+示例
+
 此 Java 实现与 Java 1.8 及更高版本兼容。[注册](../api.md#register-token)函数可能看起来像这样：
 
 ```java
