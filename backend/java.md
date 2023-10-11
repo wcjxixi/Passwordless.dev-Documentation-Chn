@@ -4,11 +4,9 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/backend/java.html)
 {% endhint %}
 
+## 入门
 
-
-入门
-
-示例
+## 示例
 
 #### 创建 `PasswordlessClient` 实例： <a href="#create-passwordlessclient-instance" id="create-passwordlessclient-instance"></a>
 
