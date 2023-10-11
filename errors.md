@@ -8,7 +8,7 @@
 
 ## 问题信息详细 <a href="#problem-details" id="problem-details"></a>
 
-所有错误都会按照 RFC-7807 被格式化为问题详情，这意味着我们的 HTTP API 和客户端代码会返回类似这样的错误：
+所有错误都会按照 [RFC-7807](https://www.rfc-editor.org/rfc/rfc7807) 被格式化为问题详情，这意味着我们的 HTTP API 和客户端代码会返回类似这样的错误：
 
 ```json5
 {
