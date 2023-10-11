@@ -8,7 +8,7 @@
 * [后端 API 参考](api.md)
 * [后端](backend/README.md)
   * [.NET](backend/dotnet.md)
-  * [Java 1.8+](backend/java.md)
+  * [=Java 1.8+](backend/java.md)
   * [Node.js](backend/nodejs.md)
   * [PHP](backend/php.md)
   * [Python 2](backend/python2.md)

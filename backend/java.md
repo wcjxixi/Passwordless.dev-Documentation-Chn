@@ -1,4 +1,4 @@
-# Java 1.8+
+# =Java 1.8+
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/backend/java.html)
@@ -6,87 +6,133 @@
 
 ## 入门
 
+1、将托管我们的包的存储库添加到您的 `pom.xml` 中：
+
+```xml
+<repositories>
+    <repository>
+        <id>ossrh</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/releases</url>
+    </repository>
+</repositories>
+```
+
+2、将我们的包的依赖项添加到您的 `pom.xml` 中：
+
+```xml
+<dependency>
+    <groupId>com.bitwarden</groupId>
+    <artifactId>passwordless</artifactId>
+    <version>1.0.5</version>
+</dependency>
+```
+
 ## 示例
-
-#### 创建 `PasswordlessClient` 实例： <a href="#create-passwordlessclient-instance" id="create-passwordlessclient-instance"></a>
-
-注册通行密钥
-
-验证用户
-
-定制化
-
-示例
 
 此 Java 实现与 Java 1.8 及更高版本兼容。[注册](../api.md#register-token)函数可能看起来像这样：
 
+### 创建 `PasswordlessClient` 实例：
+
 ```java
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Scanner;
+import com.bitwarden.passwordless.*;
 
-public class CreateToken {
+import java.io.*;
 
-    // 定义用于与远程服务器进行身份验证的 API 密钥
-    private static final String API_SECRET = "YOUR_API_SECRET";
+public class PasswordlessJavaSdkExample implements Closeable {
 
-    public static void main(String[] args) throws IOException {
-        // 从命令行参数获取别名
-        String alias = args[0];
+    private final PasswordlessClient client;
 
-        // 使用目标 URL 创建 URL 对象
-        URL url = new URL("https://v4.passwordless.dev/register/token");
-        // 打开到指定 URL 的 HTTP 连接
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // 设置请求方式为 POST
-        connection.setRequestMethod("POST");
-        // 为 API 密钥和内容类型设置请求标头
-        connection.setRequestProperty("ApiSecret", API_SECRET);
-        connection.setRequestProperty("Content-Type", "application/json");
+    public PasswordlessClientExample() {
+        PasswordlessOptions options = PasswordlessOptions.builder()
+                .apiSecret("your_api_secret")
+                .build();
 
-        // 将请求的 JSON payload 构建为字符串
-        String payload = "{" +
-                "  \"userId\": " + getRandomInt() + "," +
-                "  \"username\": \"" + alias + "\", " +
-                "  \"aliases\": [\"" + alias + "\"]" +
-                "}";
-
-        // 启用连接输出以允许写入数据
-        connection.setDoOutput(true);
-        // 使用 PrintWriter 将 payload 写入连接的输出流
-        try (PrintWriter writer = new PrintWriter(connection.getOutputStream())) {
-            writer.print(payload);
-        }
-
-        // 从连接中获取响应代码和响应消息
-        int responseCode = connection.getResponseCode();
-        String responseMessage = connection.getResponseMessage();
-        // 获取响应内容作为输入流
-        InputStream responseInputStream = connection.getInputStream();
-
-        // Read the response content using a Scanner
-        Scanner scanner = new Scanner(responseInputStream);
-        String responseData = scanner.nextLine();
-
-        // 打印响应代码、消息和数据
-        System.out.println("passwordless api response: " + responseCode + " " + responseMessage + " " + responseData);
-
-        // 检查响应码是否为 200（成功）并打印接收到的令牌
-        if (responseCode == 200) {
-            System.out.println("received token: " + responseData);
-        } else {
-            // 处理或记录任何 API 错误
-            // 如果需要，请在此处添加错误处理或日志记录代码
-        }
+        client = PasswordlessClientBuilder.create(options)
+                .build();
     }
 
-    // 生成随机整数值的函数
-    private static int getRandomInt() {
-        // 将随机浮点数（0 到 1）乘以 1e9（十亿）并返回整数值
-        return (int) (1e9 * Math.random());
+    @Override
+    public void close() throws IOException {
+        client.close();
     }
 }
 ```
+
+**注意**：使用带有 `close` 方法的 `PasswordlessClient` 后，需要关闭底层 http 客户端资源。
+
+### 注册通行密钥
+
+```java
+import com.bitwarden.passwordless.*;
+import com.bitwarden.passwordless.error.*;
+import com.bitwarden.passwordless.model.*;
+
+import java.io.*;
+import java.util.*;
+
+public class PasswordlessJavaSdkExample {
+
+    private final PasswordlessClient client;
+
+    // Constructor
+
+    public String getRegisterToken(String alias) throws PasswordlessApiException, IOException {
+
+        // Get existing userid from session or create a new user.
+        String userId = UUID.randomUUID().toString();
+
+        // Options to give the Api
+        RegisterToken registerToken = RegisterToken.builder()
+                // your user id
+                .userId(userId)
+                // e.g. user email, is shown in browser ui
+                .username(alias)
+                // Optional: Link this userid to an alias (e.g. email)
+                .aliases(Arrays.asList(alias))
+                .build();
+
+        RegisteredToken response = client.registerToken(registerToken);
+
+        // return this token
+        return response.getToken();
+    }
+}
+```
+
+### 验证用户
+
+```java
+import com.bitwarden.passwordless.*;
+import com.bitwarden.passwordless.error.*;
+import com.bitwarden.passwordless.model.*;
+
+import java.io.*;
+
+public class PasswordlessJavaSdkExample {
+
+    private final PasswordlessClient client;
+
+    // Constructor
+
+    public VerifiedUser verifySignInToken(String token) throws PasswordlessApiException, IOException {
+
+        VerifySignIn signInVerify = VerifySignIn.builder()
+                .token(token)
+                .build();
+
+        // Sign the user in, set a cookie, etc,
+        return client.signIn(signInVerify);
+    }
+}
+```
+
+### 自定义
+
+通过向 `apiSecret` 提供您的应用程序的私有 API 密钥来自定义 `PasswordlessOptions`。如果您喜欢自行托管，也可以更改 `apiUrl`。
+
+通过提供 `httpClient` [CloseableHttpClient](https://hc.apache.org/httpcomponents-client-5.2.x/index.html) 实例和 `objectMapper` [ObjectMapper](https://github.com/FasterXML/jackson-databind) 来自定义`PasswordlessClientBuilder`。
+
+### 示例
+
+有关使用此库的 Spring Boot 3 应用程序，请参阅 [Passwordless Java 示例](https://github.com/passwordless/passwordless-java-example)。
+
