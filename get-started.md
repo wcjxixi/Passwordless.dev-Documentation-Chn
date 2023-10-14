@@ -31,7 +31,7 @@ Passwordless.de 是一个软件工具包，它可以帮助网络开发人员创�
 {% embed url="https://docs.passwordless.dev/assets/img/get-started_3.6e0708d4.png" %}
 
 {% hint style="warning" %}
-将 API 密钥下载到安全的地方非常重要，因为它们会在 7 天后从管理控制台中删除。
+将 API 密钥下载到安全的地方非常重要，因为它们会在 7 天后从管理控制台中移除。
 {% endhint %}
 
 ## 安装库 <a href="#install-the-library" id="install-the-library"></a>
@@ -95,7 +95,7 @@ const p = new Client({});
 
 ## 构建注册流程 <a href="#build-a-registration-flow" id="build-a-registration-flow"></a>
 
-接下来，在后端和前前端实施一个注册[通行密钥](concepts.md#passkeys)的工作流程。从高层次来看，您将执行以下操作：
+接下来，在后端和前端实施一个注册[通行密钥](concepts.md#passkeys)的工作流程。从高层次来看，您将执行以下操作：
 
 {% embed url="https://docs.passwordless.dev/assets/img/register-diagram.c34c4838.png" %}
 
