@@ -53,7 +53,3 @@ if __name__ == "__main__":
   # 使用别名 "alias" 调用 create_token 函数并存储响应
   response_data = create_token("alias")
 ```
-
-## 参考 <a href="#references" id="references"></a>
-
-* [GitHub 上使用 Flask 的 Python 3.8+ 应用程序示例](https://github.com/passwordless/sdk-collection/tree/main/Python%203.8-Flask)

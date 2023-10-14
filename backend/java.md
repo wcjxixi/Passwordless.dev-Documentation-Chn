@@ -1,4 +1,4 @@
-# Java 1.8+
+# Java
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/backend/java.html)
@@ -6,18 +6,7 @@
 
 ## 入门 <a href="#getting-started" id="getting-started"></a>
 
-1、将托管我们的包的存储库添加到您的 `pom.xml` 中：
-
-```xml
-<repositories>
-    <repository>
-        <id>ossrh</id>
-        <url>https://s01.oss.sonatype.org/content/repositories/releases</url>
-    </repository>
-</repositories>
-```
-
-2、将我们的包的依赖项添加到您的 `pom.xml` 中：
+1、将我们的包的依赖项添加到您的 `pom.xml` 中：
 
 ```xml
 <dependency>
@@ -29,7 +18,7 @@
 
 ## 示例 <a href="#example" id="example"></a>
 
-此 Java 实现与 Java 1.8 及更高版本兼容。[注册](../api.md#register-token)函数可能看起来像这样：
+此 Java 实现与 Java 8 及更高版本兼容。[注册](../api.md#register-token)函数可能看起来像这样：
 
 ### 创建 `PasswordlessClient` 实例： <a href="#create-passwordlessclient-instance" id="create-passwordlessclient-instance"></a>
 
