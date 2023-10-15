@@ -1,5 +1,9 @@
 # 首页
 
+{% embed url="https://docs.passwordless.dev/bumper.png" fullWidth="false" %}
+
+<table data-card-size="large" data-view="cards" data-full-width="true"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><h2 id="main-title">Passwordless.dev文档</h2></td><td></td><td></td></tr></tbody></table>
+
 简化通行密钥的开发并创造无缝的身份验证体验。
 
 ***
