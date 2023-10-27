@@ -4,52 +4,91 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/backend/python3.html)
 {% endhint %}
 
-Python 3.8+ 实现只需几行代码即可完成。[注册](../api.md#register-token)函数可能看起来像这样：
+## 入门 <a href="#getting-started" id="getting-started"></a>
+
+使用 `python -m pip install passwordless` 安装。
+
+## 示例 <a href="#example" id="example"></a>
+
+此 Python 3 实现与 Python 3.8+ 及更高版本兼容。[注册](../api.md#register-token)函数可能看起来像这样：
+
+### 创建 `PasswordlessClient` 实例： <a href="#create-passwordlessclient-instance" id="create-passwordlessclient-instance"></a>
 
 ```python
-import requests  # 导入 requests 库，用于执行 HTTP 请求
-import json      # 导入 json 库，用于处理 JSON 数据
-import random    # 导入 random # 导入 random 库，用于生成随机数
+from passwordless import (
+    PasswordlessClient,
+    PasswordlessClientBuilder,
+    PasswordlessOptions
+)
 
-# 定义用于与远程服务器进行身份验证的 API 密钥
-API_SECRET = "YOUR_API_SECRET"
 
-# 生成随机整数值的函数
-def get_random_int():
-  # 将随机浮点数（0 到 1）乘以 1e9（10 亿）并返回整数值
-  return int(1e9 * random.random())
+class PasswordlessPythonSdkExample:
+    client: PasswordlessClient
 
-# 使用给定的别名创建令牌的函数
-def create_token(alias):
-  # 为应用程序接口请求准备 payload，包括用户 ID、用户名和别名
-  payload = {
-    "userId": get_random_int(),
-    "username": alias,
-    "aliases": [alias]
-  }
+    def __init__(self):
+        options = PasswordlessOptions("your_api_secret")
 
-  # 向指定 URL 发送 POST 请求，以 JSON 格式发送 payload，并包含 API 机密和内容类型的头信息
-  response = requests.post("https://v4.passwordless.dev/register/token", json=payload, headers={"ApiSecret": API_SECRET, "Content-Type": "application/json"})
+        self.client = PasswordlessClientBuilder(options).build()
 
-  # 将 JSON 响应解码为 Python 字典
-  response_data = response.json()
-
-  # 打印响应状态代码、文本和数据
-  print("passwordless api response", response.status_code, response.text, response_data)
-
-  # 检查响应状态代码是否为 200（成功）并打印接收到的令牌
-  if response.status_code == 200:
-    print("received token: ", response_data["token"])
-  else:
-    # 处理或记录任何 API 错误
-    # 如果需要，在此处添加错误处理或日志记录代码
-    pass
-
-  # 返回响应数据
-  return response_data
-
-# 检查脚本是否作为主模块运行
-if __name__ == "__main__":
-  # 使用别名 "alias" 调用 create_token 函数并存储响应
-  response_data = create_token("alias")
 ```
+
+### 注册通行密钥 <a href="#register-a-passkey" id="register-a-passkey"></a>
+
+```python
+import uuid
+from passwordless import (
+    PasswordlessClient,
+    RegisterToken,
+    RegisteredToken
+)
+
+
+class PasswordlessPythonSdkExample:
+    client: PasswordlessClient
+
+    def get_register_token(self, alias: str) -> str:
+        # 从会话中获取现有用户 ID 或创建新用户
+        user_id = str(uuid.uuid4())
+
+        # 提供给 Api 的选项
+        register_token = RegisterToken(
+            user_id=user_id,  # 您的用户 id
+            username=alias,  # 例如用户电子邮件地址，将显示在浏览器 UI 中
+            aliases=[alias]  # 可选：将此用户 ID 链接到别名（例如电子邮件地址）
+        )
+
+        response: RegisteredToken = self.client.register_token(register_token)
+
+        # 返回此令牌
+        return response.token
+```
+
+### 验证用户 <a href="#verify-user" id="verify-user"></a>
+
+```python
+from passwordless import (
+    PasswordlessClient,
+    VerifySignIn,
+    VerifiedUser
+)
+
+
+class PasswordlessPythonSdkExample:
+    client: PasswordlessClient
+
+    def verify_sign_in_token(self, token: str) -> VerifiedUser:
+        verify_sign_in = VerifySignIn(token)
+
+        # 用户登录、设置 cookie 等
+        return self.client.sign_in(verify_sign_in)
+```
+
+### 自定义 <a href="#customization" id="customization"></a>
+
+通过向 `api_secret` 提供您的应用程序的 Api Secret 来自定义 `PasswordlessOptions`。如果您喜欢自行托管，也可以更改 `api_url`。
+
+通过提供 `session` 请求会话来自定义 `PasswordlessClientBuilder` 实例。
+
+### 示例 <a href="#examples" id="examples"></a>
+
+请参阅 Flash Web 应用程序的 [Passwordless Python 示例](https://github.com/passwordless/passwordless-python/tree/main/examples/flask)。

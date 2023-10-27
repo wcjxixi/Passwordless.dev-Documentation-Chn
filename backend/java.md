@@ -63,26 +63,26 @@ public class PasswordlessJavaSdkExample {
 
     private final PasswordlessClient client;
 
-    // Constructor
+    // 构造函数
 
     public String getRegisterToken(String alias) throws PasswordlessApiException, IOException {
 
-        // Get existing userid from session or create a new user.
+        // 从会话中获取现有用户 ID 或创建新用户
         String userId = UUID.randomUUID().toString();
 
-        // Options to give the Api
+        // 提供给 Api 的选项
         RegisterToken registerToken = RegisterToken.builder()
-                // your user id
+                // 您的用户 id
                 .userId(userId)
-                // e.g. user email, is shown in browser ui
+                // 例如用户电子邮件地址，将显示在浏览器 UI 中
                 .username(alias)
-                // Optional: Link this userid to an alias (e.g. email)
+                // 可选：将此用户 ID 链接到别名（例如电子邮件地址）
                 .aliases(Arrays.asList(alias))
                 .build();
 
         RegisteredToken response = client.registerToken(registerToken);
 
-        // return this token
+        // 返回此令牌
         return response.getToken();
     }
 }
@@ -109,7 +109,7 @@ public class PasswordlessJavaSdkExample {
                 .token(token)
                 .build();
 
-        // Sign the user in, set a cookie, etc,
+        // 用户登录、设置 cookie 等
         return client.signIn(signInVerify);
     }
 }
@@ -123,4 +123,4 @@ public class PasswordlessJavaSdkExample {
 
 ### 示例 <a href="#examples" id="examples"></a>
 
-有关使用此库的 Spring Boot 3 应用程序，请参阅 [Passwordless Java 示例](https://github.com/passwordless/passwordless-java-example)。
+有关使用此库的 Spring Boot 3 应用程序，请参阅 [Passwordless Java 示例](https://github.com/passwordless/passwordless-java/tree/main/examples/spring-boot-3-jdk-17)。

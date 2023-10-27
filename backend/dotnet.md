@@ -10,7 +10,7 @@
 dotnet add package Passwordless
 ```
 
-此 ASP.NET Core 实现使用 .NET 7 和某些 JavaScript 来实现简单的passwordless.dev。[注册](../api.md#register-token)函数可能看起来像这样：
+此 ASP.NET Core 实现使用 .NET 7 和某些 JavaScript 来实现简单的 passwordless.dev。[注册](../api.md#register-token)函数可能看起来像这样：
 
 `Startup` 类负责配置和设置应用程序在其生命周期中将使用的各种服务、中间件和组件。
 
@@ -95,4 +95,4 @@ public async Task<IActionResult> VerifySignInToken(string token)
 
 ## 参考 <a href="#references" id="references"></a>
 
-* [Github 上的 ASP.NET 示例](https://github.com/passwordless/passwordless-dotnet-example)
+* [Github 上的 ASP.NET 示例](https://github.com/passwordless/passwordless-dotnet/tree/main/examples/Passwordless.Example)
