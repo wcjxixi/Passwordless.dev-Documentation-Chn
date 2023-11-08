@@ -154,13 +154,13 @@ public async Task OnPostAsync(FormModel form, CancellationToken cancellationToke
 public FormModel Form { get; init; } = new();
 ```
 
-关于登录页面 `/Account/Login`，单击 'Login' 按钮将再次触发一个类似的标志设置，从而执行我们的 JavaScript 代码的执行。
+关于登录页面 `/Account/Login`，单击「Login」按钮将再次触发一个类似的标志设置，从而执行我们的 JavaScript 代码的执行。
 
-您可以采取两种方法。您可以请求一个 "alias" 来验证哪些通行密钥与别名对应，或者如果您有可发现的凭据，可能就不需要输入表单了。
+您可以采取两种方法。您可以请求一个「alias」来验证哪些通行密钥与别名对应，或者如果您有可发现的凭据，可能就不需要输入表单了。
 
-登录过程与注册过程不同。在登录过程中，您将向身份验证器请求有效的密钥，以获取一个验证令牌。随后，该验证令牌将被传输到您的后端以启动会话。
+登录过程与注册过程不同。在登录过程中，您将向身份验证器请求有效的通行密钥，以获取一个验证令牌。随后，该验证令牌将被传输到您的后端以启动会话。
 
-使用 "Passwordless ASP.NET Identity SDK"，您可以通过简单调用 POST /passwordless-login 来简化此过程，并且 SDK 将为您处理所有必要的步骤。
+使用「Passwordless ASP.NET Identity SDK」，您可以通过简单调用 POST /passwordless-login 来简化此过程，并且 SDK 将为您处理所有必要的步骤。
 
 身份验证成功后，我们的示例应用程序将自动将您重定向到 /Authorized/HelloWorld 页面，该页面需要您登录才能访问。
 
@@ -299,7 +299,7 @@ public record AuthenticatedUserModel(string Username, string Email);
 
 ## 高级 <a href="#advanced" id="advanced"></a>
 
-如果您需要更大的灵活性，我们邀请您探索我们的 JavaScript 客户端库和 .NET SDK。如果您希望对 ASP.NET Identity 框架进行更精细的控制，或者希望进行完全自定义的实施，则此选项特别合适。
+如果您需要更大的灵活性，我们邀请您探索我们的 JavaScript 客户端库和 .NET SDK。如果您希望对 [ASP.NET Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity) 框架进行更精细的控制，或者希望进行完全自定义的实施，则此选项特别合适。
 
 * [JavaScript 客户端](javascript.md)
 * [.NET](../backend/dotnet.md)

@@ -31,7 +31,7 @@ FIDO2 由 **WebAuthn** 和 **CTAP** 两个标准化组件组成。这些标准�
 
 FIDO2 规范定义了多个用户标识符，Passwordless.dev 可以在各种注册和登录操作中使用这些标识符：
 
-* **userId** - 代表 [WebAuthn 用户句柄](https://www.w3.org/TR/webauthn-2/#dom-publickeycredentialuserentity-id)的唯一字符串。该值不会显示给用户，也不应包含个人身份信息。身份验证尝试只能根据 `userId` 值进行。。`userId` 的一个示例是数据库主键，例如 int（整数） `123` 或 guid `a2bd8bf7-2145-4a5a-910f-8fdc9ef421d3`。
+* **userId** - 代表 [WebAuthn 用户句柄](https://www.w3.org/TR/webauthn-2/#dom-publickeycredentialuserentity-id)的唯一字符串。该值不会显示给用户，也不应包含个人身份信息。身份验证尝试只能根据 `userId` 值进行。`userId` 的一个示例是数据库主键，例如 int（整数） `123` 或 guid `a2bd8bf7-2145-4a5a-910f-8fdc9ef421d3`。
 * **用户名** - （仅用于显示目的）是用户账户的人性化标识符。它仅用于显示，即帮助用户区分显示名称相似的用户账户。在浏览器 UI 中使用，从不存储在数据库中。例如 `pjfry@passwordless.dev`
 * **显示名称** - （仅用于显示目的）是账户的人性化名称，应由用户选择，仅在应用程序的 UI 中使用。例如 `Philip J. Fry`
 * **别名** - 是面向用户的对 `userId` 的引用，允许使用其他用户名、电子邮件地址等登录。默认情况下，别名在存储之前会进行哈希处理，以保护用户隐私。可以通过向 `/alias` 端点发出请求来为 `userId` 设置多个别名（[了解更多](api.md#alias)），但是在允许用户创建别名时应考虑以下规则：

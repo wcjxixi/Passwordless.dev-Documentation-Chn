@@ -4,7 +4,7 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/frontend/javascript.html)
 {% endhint %}
 
-您的前端使用Passwordless.dev JavaScript 客户端来完成与浏览器的 FIDO2 WebAuthn 加密交换。
+您的前端使用 Passwordless.dev JavaScript 客户端来完成与浏览器的 FIDO2 WebAuthn 加密交换。
 
 所有方法都**要求**使用您的 API [公钥](../concepts.md#api-keys)进行身份验证。对[私有 API](../api.md) 发出的请求则需要您的 API [私有机密](../concepts.md#api-keys)。
 

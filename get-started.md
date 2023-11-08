@@ -201,7 +201,7 @@ if(verifiedUser.success === true) {
 
 成功实施后，后端将获得验证令牌。在上面的示例中，客户端等待后端返回 `true`（**步骤 2**），然后再继续对已确认的登录采取操作。
 
-2、通过使用已生成的令牌调用 Passwordless.dev API 的 `/signin/verify` 端点（了解更多）来验证验证令牌，例如：
+2、通过使用已生成的令牌调用 Passwordless.dev API 的 `/signin/verify` 端点（[了解更多](api.md#signin-verify)）来验证验证令牌，例如：
 
 <mark style="background-color:orange;">后端</mark>
 
