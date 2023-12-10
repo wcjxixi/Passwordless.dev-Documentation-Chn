@@ -118,6 +118,10 @@ if(error) {
 
 当您调用 `/register/token` 端点时，请移除 `attestation` 属性或将值更改为 `"none"`。
 
-### max\_users\_reached <a href="#max-users-reached" id="max-users-reached"></a>
+### max\_users\_exceeded <a href="#max-users-reached" id="max-users-reached"></a>
 
-当您尝试创建新的用户但已达到计划的最大用户数时，您会收到此错误。[了解更多](https://bitwarden.com/products/passwordless/)。
+当您尝试创建新的用户但已达到计划的最大用户数时，您会收到此错误。
+
+现有用户仍然可以添加其他凭据。
+
+您可以在此处[了解更多](https://bitwarden.com/products/passwordless/)。
