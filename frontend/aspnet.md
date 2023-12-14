@@ -53,18 +53,16 @@ app.MapPasswordless(enableRegisterEndpoint: true);
 
 ```html
 @page
-
 @using Passwordless.Net
 @using Microsoft.Extensions.Options
 @using Passwordless.AspNetCore
-
 @model RegisterModel
-
 @inject IOptions<PasswordlessAspNetCoreOptions> PasswordlessOptions;
 
 @{
     ViewData["Title"] = "Register";
 }
+
 <h1>@ViewData["Title"]</h1>
 
 @{
@@ -76,12 +74,22 @@ app.MapPasswordless(enableRegisterEndpoint: true);
         <form class="needs-validation" action="" method="POST">
             <div class="mb-3">
                 <label asp-for="Form.Username" class="form-label">Username</label>
-                <input placeholder="Jane Doe" type="text" asp-for="Form.Username" class="form-control" id="username">
+                <input
+                        placeholder="Jane Doe"
+                        type="text"
+                        asp-for="Form.Username"
+                        class="form-control"
+                        id="username"/>
                 <span class="text-danger" asp-validation-for="Form.Username"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Form.Email" class="form-label">Email</label>
-                <input placeholder="janedoe@example.org" type="text" asp-for="Form.Email" class="form-control" id="email">
+                <input
+                        placeholder="janedoe@example.org"
+                        type="text"
+                        asp-for="Form.Email"
+                        class="form-control"
+                        id="email"/>
                 <span class="text-danger" asp-validation-for="Form.Email"></span>
             </div>
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
@@ -94,42 +102,42 @@ app.MapPasswordless(enableRegisterEndpoint: true);
 
 @if (canAddPasskeys)
 {
-    <script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js"></script>
-    <script>
-        async function register() {
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const registrationRequest = {
-                email: email,
-                username: username,
-                displayName: username,
-                aliases: [email]
-            };
-        
-            const registrationResponse = await fetch('/passwordless-register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(registrationRequest)
+<script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js"></script>
+<script>
+    async function register() {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const registrationRequest = {
+            email: email,
+            username: username,
+            displayName: username,
+            aliases: [email]
+        };
+
+        const registrationResponse = await fetch('/passwordless-register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registrationRequest)
+        });
+
+        // If no error then deserialize and use returned token to create now our passkeys
+        if (registrationResponse.ok) {
+            const registrationResponseJson = await registrationResponse.json();
+            const token = registrationResponseJson.token;
+
+            // We need to use Client from https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js which is imported above.
+            const p = new Passwordless.Client({
+                apiKey: '@PasswordlessOptions.Value.ApiKey',
+                apiUrl: '@PasswordlessOptions.Value.ApiUrl'
             });
-        
-            // 如果没有错误，则进行反序列化，然后使用返回的标记创建我们的通行密钥
-            if (registrationResponse.ok) {
-                const registrationResponseJson = await registrationResponse.json();
-                const token = registrationResponseJson.token;
-        
-                // 我们需要使用从 https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js 导入的客户端。
-                const p = new Passwordless.Client({
-                    apiKey: "@PasswordlessOptions.Value.ApiKey",
-                    apiUrl: "@PasswordlessOptions.Value.ApiUrl"
-                });
-                const registeredPasskeyResponse = await p.register(token, email);
-            }
+            const registeredPasskeyResponse = await p.register(token, email);
         }
-        
-        register();
-    </script>
+    }
+
+    register();
+</script>
 }
 ```
 
@@ -170,10 +178,10 @@ public FormModel Form { get; init; } = new();
 @using Microsoft.Extensions.Options
 @using Passwordless.AspNetCore
 @inject IOptions<PasswordlessAspNetCoreOptions> PasswordlessOptions;
-
 @{
     ViewData["Title"] = "Login";
 }
+
 <h1>@ViewData["Title"]</h1>
 
 @{
@@ -185,7 +193,12 @@ public FormModel Form { get; init; } = new();
         <form class="needs-validation" action="" method="POST">
             <div class="mb-3">
                 <label asp-for="Form.Email" class="form-label">Email</label>
-                <input placeholder="janedoe@example.org" type="text" asp-for="Form.Email" class="form-control" id="email">
+                <input
+                        placeholder="janedoe@example.org"
+                        type="text"
+                        asp-for="Form.Email"
+                        class="form-control"
+                        id="email"/>
                 <span class="text-danger" asp-validation-for="Form.Email"></span>
             </div>
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
@@ -198,39 +211,39 @@ public FormModel Form { get; init; } = new();
 
 @if (canLogin)
 {
-    <script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js"></script>
-    <script>
-        async function login() {
-            const alias = document.getElementById("email").value;
-            const p = new Passwordless.Client({
-                apiKey: "@PasswordlessOptions.Value.ApiKey",
-                apiUrl: "@PasswordlessOptions.Value.ApiUrl"
-            });
-            const loginPasskeyResponse = await p.signinWithAlias(alias);
-            if (!loginPasskeyResponse) {
-                return;
-            }
-            const loginRequest = {
-                token: loginPasskeyResponse.token
-            };
-            const loginResponse = await fetch('/passwordless-login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginRequest)
-            });
-        
-            if (loginResponse.ok) {
-                console.log('login successful: ' + await loginResponse.text());
-        
-                // 重定向到授权页面 /Authorized/HelloWorld
-                window.location.href = '/Authorized/HelloWorld';
-            }
+<script src="https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js"></script>
+<script>
+    async function login() {
+        const alias = document.getElementById('email').value;
+        const p = new Passwordless.Client({
+            apiKey: '@PasswordlessOptions.Value.ApiKey',
+            apiUrl: '@PasswordlessOptions.Value.ApiUrl'
+        });
+        const loginPasskeyResponse = await p.signinWithAlias(alias);
+        if (!loginPasskeyResponse) {
+            return;
         }
-        
-        login();
-    </script>
+        const loginRequest = {
+            token: loginPasskeyResponse.token
+        };
+        const loginResponse = await fetch('/passwordless-login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginRequest)
+        });
+
+        if (loginResponse.ok) {
+            console.log('login successful: ' + (await loginResponse.text()));
+
+            // Redirect to authorized page /Authorized/HelloWorld
+            window.location.href = '/Authorized/HelloWorld';
+        }
+    }
+
+    login();
+</script>
 }
 ```
 
