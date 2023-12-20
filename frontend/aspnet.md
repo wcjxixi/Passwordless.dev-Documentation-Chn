@@ -122,12 +122,12 @@ app.MapPasswordless(enableRegisterEndpoint: true);
             body: JSON.stringify(registrationRequest)
         });
 
-        // If no error then deserialize and use returned token to create now our passkeys
+        // 如果没有错误，则进行反序列化，然后使用返回的令牌创建我们的通行密钥
         if (registrationResponse.ok) {
             const registrationResponseJson = await registrationResponse.json();
             const token = registrationResponseJson.token;
 
-            // We need to use Client from https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js which is imported above.
+            // 我们需要使用从 https://cdn.passwordless.dev/dist/1.1.0/umd/passwordless.umd.js 导入的客户端。
             const p = new Passwordless.Client({
                 apiKey: '@PasswordlessOptions.Value.ApiKey',
                 apiUrl: '@PasswordlessOptions.Value.ApiUrl'
