@@ -1,4 +1,4 @@
-# 后端 API 参考
+# =后端 API 参考
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/api.html)
@@ -84,7 +84,7 @@ const { token } = await fetch(apiUrl + "/register", {
 
 ### 请求 <a href="#request" id="request"></a>
 
-向 `/signin` 端点发出的 `POST` 请求会解压[验证令牌](concepts.md#tokens)，该令牌必须通过在前端调用 `.signinWith*()` 方法来生成（[了解更多](frontend/javascript.md#signinwith)）并包含在请求正文中，例如：
+向 `/signin/verify` 端点发出的 `POST` 请求会解压[验证令牌](concepts.md#tokens)，该令牌必须通过在前端调用 `.signinWith*()` 方法来生成（[了解更多](frontend/javascript.md#signinwith)）并包含在请求正文中，例如：
 
 {% tabs %}
 {% tab title="HTTP" %}
@@ -104,12 +104,12 @@ Content-Type: application/json
 const apiUrl = "https://v4.passwordless.dev";
 
 // 从前端获取验证令牌。
-const token = { token: req.query.token };
+const payload = { token: req.query.token };
 
 // 使用您的 API 私有机密将验证令牌 POST 到 Passwordless.dev API。
 const response = await fetch(apiUrl + "/signin/verify", {
     method: "POST",
-    body: JSON.stringify({token}),
+    body: JSON.stringify(payload),
     headers: { "ApiSecret": "myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4", "Content-Type": "application/json" }
 });
 ```
@@ -140,6 +140,12 @@ Passwordless.dev 私有 API 将解压验证令牌以检查其合法性。
 
 使用 `.success` 值（`true` 或 `false`）确定下一步操作，即是否完成登录（[了解更多](frontend/javascript.md#signinwith)）。
 
+## /signin/generate-token <a href="#signin-generate-token" id="signin-generate-token"></a>
+
+### 请求 <a href="#request" id="request"></a>
+
+### 相应 <a href="#response" id="response"></a>
+
 ## /alias <a href="#alias" id="alias"></a>
 
 ### 请求 <a href="#request" id="request"></a>
@@ -155,7 +161,14 @@ POST https://v4.passwordless.dev/alias HTTP/1.1
 ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
 Content-Type: application/json
 
-{ "userId": "107fb578-9559-4540-a0e2-f82ad78852f7", "aliases": ["pjfry@passwordless.dev", "benderrules@passwordless.dev"], "hashing": true }
+{
+  "userId": "107fb578-9559-4540-a0e2-f82ad78852f7",
+  "aliases": [
+    "pjfry@passwordless.dev",
+    "benderrules@passwordless.dev"
+  ],
+  "hashing": true
+}
 ```
 {% endtab %}
 
@@ -233,25 +246,24 @@ const credentials = await fetch(apiUrl + "/credentials/list", {
 
 ```json
 [
-    {
-        "descriptor": {
-            "type": "public-key",
-            "id": "2mgrJ6LPItfxbnVc2UgFPHowNGKaYBm3Pf4so1bsXSk"
-        },
-        "publicKey": "pQECAyYgASFYIPi4M0A+ZFeyOHEC9iMe6dVhFnmOZdgac3MRmfqVpZ0AIlggWZ+l6+5rOGckXAsJ8i+mvPm4YuRQYDTHiJhIauagX4Q=",
-        "userHandle": "YzhhMzJlNWItNDZkMy00ODA4LWFlMTAtMTZkM2UyNmZmNmY5",
-        "signatureCounter": 0,        
-        "createdAt": "2023-04-21T13:33:50.0764103",
-        "aaGuid": "adce0002-35bc-c60a-648b-0b25f1f05503",
-        "lastUsedAt": "2023-04-21T13:33:50.0764103",
-        "rpid": "myapp.example.com",
-        "origin": "https://myapp.example.com",
-        "country": "US",
-        "device": "Chrome, Mac OS X 10",
-        "nickname": "Fred's Macbook Pro 2",
-        "userId": "c8a32e5b-46d3-4808-ae10-16d3e26ff6f9"
+  {
+    "descriptor": {
+      "type": "public-key",
+      "id": "2mgrJ6LPItfxbnVc2UgFPHowNGKaYBm3Pf4so1bsXSk"
     },
-    ...
+    "publicKey": "pQECAyYgASFYIPi4M0A+ZFeyOHEC9iMe6dVhFnmOZdgac3MRmfqVpZ0AIlggWZ+l6+5rOGckXAsJ8i+mvPm4YuRQYDTHiJhIauagX4Q=",
+    "userHandle": "YzhhMzJlNWItNDZkMy00ODA4LWFlMTAtMTZkM2UyNmZmNmY5",
+    "signatureCounter": 0,
+    "createdAt": "2023-04-21T13:33:50.0764103",
+    "aaGuid": "adce0002-35bc-c60a-648b-0b25f1f05503",
+    "lastUsedAt": "2023-04-21T13:33:50.0764103",
+    "rpid": "myapp.example.com",
+    "origin": "https://myapp.example.com",
+    "country": "US",
+    "device": "Chrome, Mac OS X 10",
+    "nickname": "Fred's Macbook Pro 2",
+    "userId": "c8a32e5b-46d3-4808-ae10-16d3e26ff6f9"
+  } //, ...
 ]
 ```
 
@@ -269,7 +281,7 @@ ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
 Content-Type: application/json
 
 {
-    "credentialId":"qgB2ZetBhi0rIcaQK8_HrLQzXXfwKia46_PNjUC2L_w"
+  "credentialId": "qgB2ZetBhi0rIcaQK8_HrLQzXXfwKia46_PNjUC2L_w"
 }
 ```
 
