@@ -144,6 +144,43 @@ Passwordless.dev 私有 API 将解压身份验证令牌以检查其合法性。
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 `/signin/generate-token` 端点发出的 `POST` 请求可为用户手动生成一个身份验证令牌，从而避开常规的登录流程（即 `.signinWith*()` 方法）。生成的令牌可以通过 `/signin/verify` 端点进行验证，并像普通身份验证令牌一样使用。
+
+{% tabs %}
+{% tab title="HTTP" %}
+```http
+POST https://v4.passwordless.dev/signin/generate-token HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "userId": "123"
+}
+```
+{% endtab %}
+
+{% tab title="JavaScript" %}
+```javascript
+const apiUrl = 'https://v4.passwordless.dev';
+
+// 生成身份验证令牌，绕过通常的登录过程。
+const payload = {
+  userId: '107fb578-9559-4540-a0e2-f82ad78852f7'
+};
+
+// 使用您的 API 私有机密将用户 ID POST 到 Passwordless.dev API。
+const response = await fetch(apiUrl + '/signin/generate-token', {
+  method: 'POST',
+  body: JSON.stringify(payload),
+  headers: {
+    'ApiSecret': 'myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4',
+    'Content-Type': 'application/json'
+  }
+});
+```
+{% endtab %}
+{% endtabs %}
+
 ### 相应 <a href="#response" id="response"></a>
 
 ## /alias <a href="#alias" id="alias"></a>
