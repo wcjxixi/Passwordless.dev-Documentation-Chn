@@ -1,4 +1,4 @@
-# =后端 API 参考
+# 后端 API 参考
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/api.html)
@@ -182,6 +182,14 @@ const response = await fetch(apiUrl + '/signin/generate-token', {
 {% endtabs %}
 
 ### 相应 <a href="#response" id="response"></a>
+
+成功后，`/signin/generate-token` 端点将返回一个响应对象，例如：
+
+```json
+{
+  "token": "d5vzCkL_GvpS4VYtoT3..."
+}
+```
 
 ## /alias <a href="#alias" id="alias"></a>
 

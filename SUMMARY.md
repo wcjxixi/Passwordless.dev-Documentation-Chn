@@ -5,7 +5,7 @@
 * [关于 Passwordless.dev](about-passwordless.dev.md)
 * [发行说明](release-notes.md)
 * [入门](get-started.md)
-* [=后端 API 参考](api.md)
+* [后端 API 参考](api.md)
 * [后端](backend/README.md)
   * [.NET](backend/dotnet.md)
   * [Java](backend/java.md)
