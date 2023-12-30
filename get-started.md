@@ -172,7 +172,7 @@ if(token) {
 
 您编写的代码必须：
 
-1、在前端，发起登录并获取[验证令牌](concepts.md#tokens)，后台将检查该验证令牌以完成登录。您可以使用别名、userId 或可发现凭据（[了解更多](frontend/javascript.md#signinwith)）来发起登录：
+1、在前端，发起登录并获取[身份验证令牌](concepts.md#tokens)，后台将检查该验证令牌以完成登录。您可以使用别名、userId 或可发现凭据（[了解更多](frontend/javascript.md#signinwith)）来发起登录：
 
 <mark style="background-color:orange;">前端</mark>
 
@@ -187,7 +187,7 @@ const p = new Client({
 // 允许用户指定一个用户名或别名。
 const alias = "pjfry@passwordless.dev";
 
-// 为用户生成验证令牌。
+// 为用户生成身份验证令牌。
 const {token, error} = await p.signinWithAlias(alias);
 // 提示：您也可以尝试使用 p.signinWithDiscoverable();
 
@@ -199,18 +199,18 @@ if(verifiedUser.success === true) {
 }
 ```
 
-成功实施后，后端将获得验证令牌。在上面的示例中，客户端等待后端返回 `true`（**步骤 2**），然后再继续对已确认的登录采取操作。
+成功实施后，将使身份验证令牌可供后端使用。在上面的示例中，客户端等待后端返回 `true`（**步骤 2**），然后再继续对已确认的登录采取操作。
 
-2、通过使用已生成的令牌调用 Passwordless.dev API 的 `/signin/verify` 端点（[了解更多](api.md#signin-verify)）来验证验证令牌，例如：
+2、通过使用已生成的令牌调用 Passwordless.dev API 的 `/signin/verify` 端点（[了解更多](api.md#signin-verify)）来验证身份验证令牌，例如：
 
 <mark style="background-color:orange;">后端</mark>
 
 ```javascript
 // 为此步骤编写的代码应在您的后端运行。
-// 从前端获取验证令牌。
+// 从前端获取身份验证令牌。
 const token = { token: req.query.token };
 
-// 使用您的 API 私有机密将验证令牌 POST 到 Passwordless.dev API。
+// 使用您的 API 私有机密将身份验证令牌 POST 到 Passwordless.dev API。
 const apiUrl = "https://v4.passwordless.dev";
 const response = await fetch(apiurl + "/signin/verify", {
     method: "POST",

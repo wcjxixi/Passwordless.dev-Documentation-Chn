@@ -84,7 +84,7 @@ const { token } = await fetch(apiUrl + "/register", {
 
 ### 请求 <a href="#request" id="request"></a>
 
-向 `/signin/verify` 端点发出的 `POST` 请求会解压[验证令牌](concepts.md#tokens)，该令牌必须通过在前端调用 `.signinWith*()` 方法来生成（[了解更多](frontend/javascript.md#signinwith)）并包含在请求正文中，例如：
+向 `/signin/verify` 端点发出的 `POST` 请求会解压[身份验证令牌](concepts.md#tokens)，该令牌必须通过在前端调用 `.signinWith*()` 方法来生成（[了解更多](frontend/javascript.md#signinwith)）并包含在请求正文中，例如：
 
 {% tabs %}
 {% tab title="HTTP" %}
@@ -103,10 +103,10 @@ Content-Type: application/json
 ```javascript
 const apiUrl = "https://v4.passwordless.dev";
 
-// 从前端获取验证令牌。
+// 从前端获取身份验证令牌。
 const payload = { token: req.query.token };
 
-// 使用您的 API 私有机密将验证令牌 POST 到 Passwordless.dev API。
+// 使用您的 API 私有机密将身份验证令牌 POST 到 Passwordless.dev API。
 const response = await fetch(apiUrl + "/signin/verify", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -116,7 +116,7 @@ const response = await fetch(apiUrl + "/signin/verify", {
 {% endtab %}
 {% endtabs %}
 
-Passwordless.dev 私有 API 将解压验证令牌以检查其合法性。
+Passwordless.dev 私有 API 将解压身份验证令牌以检查其合法性。
 
 ### 响应 <a href="#response" id="response"></a>
 

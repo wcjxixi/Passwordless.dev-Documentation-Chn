@@ -97,7 +97,11 @@ FIDO2 身份验证器有两种类型：
 在正常业务过程中，Passwordless.dev 使用两种重要类型的临时令牌：
 
 * **注册令牌**，由私有 API 通过请求 `/register/token` 端点创建（[了解更多](api.md#register-token)）。您的前端将在最终用户的设备上注册此令牌，以便在登录操作中使用。
-* **验证令牌**，由公共 API 通过调用 `.signin()` 方法创建（[了解更多](api.md#signin-verify)）。您的后端将验证此令牌以完成登录操作
+* **身份验证令牌**，由公共 API 通过调用 `.signin()` 方法创建（[了解更多](api.md#signin-verify)）。您的后端将验证此令牌以完成登录操作（通过 `/signin/verify` 端点）。
+
+此外，Passwordless.dev 还使用其他类型的令牌用于特殊目的：
+
+* **手动生成的身份验证令牌**，由私有 API 通过对 `/signin/generate-token` 端点的请求创建。该令牌的权重与常规身份验证令牌相同，但它是手动生成的，绕过了常规身份验证流程。它主要用于方便账户恢复和通过魔法链接登录。。
 
 ## 更多 <a href="#more-terms" id="more-terms"></a>
 

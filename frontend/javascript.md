@@ -88,7 +88,7 @@ const { token, error } = await p.register(registerToken);
 
 ## .signinWith() <a href="#signinwith" id="signinwith"></a>
 
-调用 `.signin` 方法生成一个[验证令牌](../concepts.md#tokens)，后端将检查该令牌以完成登录。有几种不同的 `.signinWith*()` 方法可用：
+调用 `.signin` 方法生成一个[身份验证令牌](../concepts.md#tokens)，后端将检查该令牌以完成登录。有几种不同的 `.signinWith*()` 方法可用：
 
 | 方法                          | 描述                                        | 示例                                                 |
 | --------------------------- | ----------------------------------------- | -------------------------------------------------- |
@@ -104,7 +104,7 @@ const p = new Passwordless.Client({
 });
 
 
-// 为用户生成验证令牌。
+// 为用户生成身份验证令牌。
 
 // 选项 1：使浏览器能够为任何具有 autofill="webauthn" 的输入建议密码（仅适用于可发现的密码）。
 const { token, error } = await p.signinWithAutofill();
