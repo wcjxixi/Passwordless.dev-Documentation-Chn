@@ -255,5 +255,5 @@ if (body.success) {
 恭喜您已经掌握了 Passwordless.dev 的基本实现！接下来：
 
 * 查看其他[后端语言](backend/)和[前端框架](frontend/)，找到最适合您的应用程序的语言。
-* 深入了解[管理控制台](admin-console.md)提供的功能。
+* 深入了解[管理控制台](admin-console/)提供的功能。
 * 找出适合您的应用程序或业务需求的[最佳方案](https://bitwarden.com/products/passwordless/#pricing)。
