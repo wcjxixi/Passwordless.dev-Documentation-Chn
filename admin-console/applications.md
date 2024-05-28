@@ -51,7 +51,7 @@
 
 您现在可以调用 `https://v4.passwordless.dev/signin/generate-token` 来检索手动生成的用于无通行密钥登录的身份验证令牌了。更多信息，请参阅[此文档](../api.md#signin-generate-token)。
 
-### 魔法链接 <a href="#magic-links" id="magic-links"></a>
+### Magic Link <a href="#magic-links" id="magic-links"></a>
 
 Magic Links 使您能够通过电子邮件向用户发送一个链接，将他们重定向到您的应用程序，而无需配置您自己的电子邮件提供商。要启用此功能，请转到 **Setting** 页面，滚动到 **Magic Links** 部分，选中该复选框，然后点击**保存**。
 

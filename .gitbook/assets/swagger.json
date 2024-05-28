@@ -1,0 +1,2545 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Passwordless.dev API",
+    "termsOfService": "https://bitwarden.com/terms/",
+    "contact": {
+      "name": "Support",
+      "url": "https://bitwarden.com/contact/",
+      "email": "support@passwordless.dev"
+    },
+    "version": "v4"
+  },
+  "paths": {
+    "/alias": {
+      "post": {
+        "tags": [
+          "Aliases"
+        ],
+        "summary": "Sets one or more aliases for an existing user and removes existing aliases that are not included in the request.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#alias"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AliasPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          }
+        }
+      }
+    },
+    "/alias/list": {
+      "get": {
+        "tags": [
+          "Aliases"
+        ],
+        "summary": "Lists all aliases for a given user.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AliasPointerListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/features": {
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Change the configuration or features.",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetFeaturesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          }
+        }
+      }
+    },
+    "/authenticators/list": {
+      "get": {
+        "tags": [
+          "Authenticators"
+        ],
+        "summary": "List configured authenticators on the allowlist or blocklist. When the list is empty, all authenticators are allowed. (Requires the `Enterprise` plan.)",
+        "parameters": [
+          {
+            "name": "IsAllowed",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConfiguredAuthenticatorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authenticators/add": {
+      "post": {
+        "tags": [
+          "Authenticators"
+        ],
+        "summary": "Adds authenticators to the allowlist or blocklist for use with attestation. (Requires the `Enterprise` plan.)",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAuthenticatorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          }
+        }
+      }
+    },
+    "/authenticators/remove": {
+      "post": {
+        "tags": [
+          "Authenticators"
+        ],
+        "summary": "Removes authenticators from the allowlist or blocklist. (Requires the `Enterprise` plan.)",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveAuthenticatorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          }
+        }
+      }
+    },
+    "/credentials/delete": {
+      "post": {
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Deletes a credential.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#credentials-delete"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialsDeleteDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credentials/list": {
+      "get": {
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Lists credentials for a given user.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#credentials-list"
+        },
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoredCredentialListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Lists credentials for a given user.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#credentials-list"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCredentialsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoredCredentialListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "tags": [
+          "Event Logging"
+        ],
+        "summary": "Lists event logs. (Requires the `Enterprise` plan.)",
+        "parameters": [
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "NumberOfResults",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEventLogEventsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "🔴 You are not allowed to perform the action, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/magic-links/send": {
+      "post": {
+        "tags": [
+          "Magic Links"
+        ],
+        "summary": "Sends an e-mail containing a magic link template allowing users to login.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#magic-links-send"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMagicLinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "✅ Everything is OK, response is empty."
+          },
+          "429": {
+            "description": "🔴 Too many requests, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/token": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "Registration (Step 1 - Server)",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#register-token"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/begin": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "Registration (Step 2 - Client): Get credential creation options.",
+        "parameters": [
+          {
+            "name": "ApiKey",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your public API key",
+              "example": "yourappid:public:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FidoRegistrationBeginDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CredentialCreateOptionsSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/complete": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "Registration (Step 3 - Client): Stores the created public key.",
+        "parameters": [
+          {
+            "name": "ApiKey",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your public API key",
+              "example": "yourappid:public:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationCompleteDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reporting/credentials/periodic": {
+      "get": {
+        "tags": [
+          "Reporting"
+        ],
+        "summary": "Returns a list of reports, every report mentions how many credentials and users are registered for a given day.",
+        "parameters": [
+          {
+            "name": "From",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeriodicCredentialReportResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reporting/active-users/periodic": {
+      "get": {
+        "tags": [
+          "Reporting"
+        ],
+        "summary": "Returns a list of active user reports, every report mentions how many users were active in the last day and week\r\nfor a given day.",
+        "parameters": [
+          {
+            "name": "From",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PeriodicActiveUserReportResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signin/generate-token": {
+      "post": {
+        "tags": [
+          "Sign In"
+        ],
+        "summary": "Manually generates an authentication token for the specified user, side-stepping the usual authentication flow.\r\nThis approach can be used to implement a \"magic link\"-style login and other similar scenarios.",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#signin-generate-token"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SigninTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SigninTokenRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signin/begin": {
+      "post": {
+        "tags": [
+          "Sign In"
+        ],
+        "summary": "Signin (Step 1 - Client)",
+        "parameters": [
+          {
+            "name": "ApiKey",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your public API key",
+              "example": "yourappid:public:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInBeginDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssertionOptionsSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signin/complete": {
+      "post": {
+        "tags": [
+          "Sign In"
+        ],
+        "summary": "Signin (Step 2 - Client)",
+        "parameters": [
+          {
+            "name": "ApiKey",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your public API key",
+              "example": "yourappid:public:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInCompleteDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signin/verify": {
+      "post": {
+        "tags": [
+          "Sign In"
+        ],
+        "summary": "Signin (Step 3 - Server)",
+        "externalDocs": {
+          "description": "External Documentation",
+          "url": "https://docs.passwordless.dev/guide/api.html#signin-verify"
+        },
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInVerifyDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifySignInToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/list": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a list of users.",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/count": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get the amount of users.",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Everything is OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/delete": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Deletes a user.",
+        "parameters": [
+          {
+            "name": "ApiSecret",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "description": "Your private API key",
+              "example": "yourappid:secret:00000000000000000000000000000000"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDeletePayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "🔴 Bad request, see problem details for more info.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "✅ Everything is OK."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddAuthenticatorsRequest": {
+        "type": "object",
+        "properties": {
+          "aaGuids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "isAllowed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Algorithm": {
+        "enum": [
+          -65535,
+          -259,
+          -258,
+          -257,
+          -47,
+          -39,
+          -38,
+          -37,
+          -36,
+          -35,
+          -8,
+          -7
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "AliasPayload": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "aliases": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hashing": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AliasPointer": {
+        "type": "object",
+        "properties": {
+          "tenant": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "alias": {
+            "type": "string"
+          },
+          "plaintext": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AliasPointerListResponse": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AliasPointer"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "AssertionOptions": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "challenge": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rpId": {
+            "type": "string",
+            "nullable": true
+          },
+          "allowCredentials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicKeyCredentialDescriptor"
+            },
+            "nullable": true
+          },
+          "userVerification": {
+            "$ref": "#/components/schemas/UserVerificationRequirement"
+          },
+          "extensions": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientInputs"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AssertionOptionsSessionResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AssertionOptions"
+          },
+          "session": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AssertionResponse": {
+        "type": "object",
+        "properties": {
+          "authenticatorData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "signature": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "clientDataJSON": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "userHandle": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttestationConveyancePreference": {
+        "enum": [
+          "none",
+          "indirect",
+          "direct",
+          "enterprise"
+        ],
+        "type": "string"
+      },
+      "AttestationResponse": {
+        "type": "object",
+        "properties": {
+          "attestationObject": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "clientDataJSON": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "transports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthenticatorTransport"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsClientInputs": {
+        "type": "object",
+        "properties": {
+          "example.extension.bool": {
+            "nullable": true
+          },
+          "appid": {
+            "type": "string",
+            "nullable": true
+          },
+          "exts": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "uvm": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "devicePubKey": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsDevicePublicKeyInputs"
+          },
+          "credProps": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "prf": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsPRFInputs"
+          },
+          "credentialProtectionPolicy": {
+            "$ref": "#/components/schemas/CredentialProtectionPolicy"
+          },
+          "enforceCredentialProtectionPolicy": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsClientOutputs": {
+        "type": "object",
+        "properties": {
+          "example.extension.bool": {
+            "nullable": true
+          },
+          "appid": {
+            "type": "boolean"
+          },
+          "exts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "uvm": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "nullable": true
+          },
+          "devicePubKey": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsDevicePublicKeyOutputs"
+          },
+          "credProps": {
+            "$ref": "#/components/schemas/CredentialPropertiesOutput"
+          },
+          "prf": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsPRFOutputs"
+          },
+          "credProtect": {
+            "$ref": "#/components/schemas/CredentialProtectionPolicy"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsDevicePublicKeyInputs": {
+        "type": "object",
+        "properties": {
+          "attestation": {
+            "type": "string",
+            "nullable": true
+          },
+          "attestationFormats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsDevicePublicKeyOutputs": {
+        "type": "object",
+        "properties": {
+          "authenticatorOutput": {
+            "type": "string",
+            "format": "byte"
+          },
+          "signature": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsPRFInputs": {
+        "type": "object",
+        "properties": {
+          "eval": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsPRFValues"
+          },
+          "evalByCredential": {
+            "$ref": "#/components/schemas/StringAuthenticationExtensionsPRFValuesKeyValuePair"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsPRFOutputs": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "results": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsPRFValues"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticationExtensionsPRFValues": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "second": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticatorAssertionRawResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "rawId": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "response": {
+            "$ref": "#/components/schemas/AssertionResponse"
+          },
+          "type": {
+            "$ref": "#/components/schemas/PublicKeyCredentialType"
+          },
+          "extensions": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientOutputs"
+          },
+          "clientExtensionResults": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientOutputs"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticatorAttachment": {
+        "enum": [
+          "platform",
+          "cross-platform"
+        ],
+        "type": "string"
+      },
+      "AuthenticatorAttestationRawResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "rawId": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/PublicKeyCredentialType"
+          },
+          "response": {
+            "$ref": "#/components/schemas/AttestationResponse"
+          },
+          "extensions": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientOutputs"
+          },
+          "clientExtensionResults": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientOutputs"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticatorSelection": {
+        "type": "object",
+        "properties": {
+          "authenticatorAttachment": {
+            "$ref": "#/components/schemas/AuthenticatorAttachment"
+          },
+          "residentKey": {
+            "$ref": "#/components/schemas/ResidentKeyRequirement"
+          },
+          "requireResidentKey": {
+            "type": "boolean",
+            "deprecated": true
+          },
+          "userVerification": {
+            "$ref": "#/components/schemas/UserVerificationRequirement"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticatorTransport": {
+        "enum": [
+          "usb",
+          "nfc",
+          "ble",
+          "smart-card",
+          "hybrid",
+          "internal"
+        ],
+        "type": "string"
+      },
+      "ConfiguredAuthenticatorResponse": {
+        "type": "object",
+        "properties": {
+          "aaGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CountRecord": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialCreateOptions": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "rp": {
+            "$ref": "#/components/schemas/PublicKeyCredentialRpEntity"
+          },
+          "user": {
+            "$ref": "#/components/schemas/Fido2User"
+          },
+          "challenge": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "pubKeyCredParams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PubKeyCredParam"
+            },
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "attestation": {
+            "$ref": "#/components/schemas/AttestationConveyancePreference"
+          },
+          "authenticatorSelection": {
+            "$ref": "#/components/schemas/AuthenticatorSelection"
+          },
+          "excludeCredentials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicKeyCredentialDescriptor"
+            },
+            "nullable": true
+          },
+          "extensions": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsClientInputs"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialCreateOptionsSessionResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CredentialCreateOptions"
+          },
+          "session": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialPropertiesOutput": {
+        "type": "object",
+        "properties": {
+          "rk": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialProtectionPolicy": {
+        "enum": [
+          "userVerificationOptional",
+          "userVerificationOptionalWithCredentialIDList",
+          "userVerificationRequired"
+        ],
+        "type": "string"
+      },
+      "CredentialsDeleteDTO": {
+        "type": "object",
+        "properties": {
+          "credentialId": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventResponse": {
+        "type": "object",
+        "properties": {
+          "performedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "message": {
+            "type": "string"
+          },
+          "performedBy": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "eventType": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "apiKeyId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Fido2User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FidoRegistrationBeginDTO": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetCredentialsRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetEventLogEventsResponse": {
+        "type": "object",
+        "properties": {
+          "tenantId": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventResponse"
+            }
+          },
+          "totalEventCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HttpValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": { }
+      },
+      "PeriodicActiveUserReportResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "dailyActiveUsers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "weeklyActiveUsers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalUsers": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PeriodicCredentialReportResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "users": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "credentials": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "PubKeyCredParam": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PublicKeyCredentialType"
+          },
+          "alg": {
+            "$ref": "#/components/schemas/Algorithm"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicKeyCredentialDescriptor": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PublicKeyCredentialType"
+          },
+          "id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "transports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthenticatorTransport"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicKeyCredentialRpEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicKeyCredentialType": {
+        "enum": [
+          "public-key",
+          "invalid"
+        ],
+        "type": "string"
+      },
+      "RegisterToken": {
+        "required": [
+          "aliases",
+          "userId",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tokenId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string"
+          },
+          "userId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "username": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "attestation": {
+            "type": "string"
+          },
+          "authenticatorType": {
+            "type": "string"
+          },
+          "discoverable": {
+            "type": "boolean"
+          },
+          "userVerification": {
+            "type": "string"
+          },
+          "aliases": {
+            "maxItems": 250,
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "aliasHashing": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterTokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegistrationCompleteDTO": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "session": {
+            "type": "string"
+          },
+          "response": {
+            "$ref": "#/components/schemas/AuthenticatorAttestationRawResponse"
+          },
+          "nickname": {
+            "maxLength": 64,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveAuthenticatorsRequest": {
+        "type": "object",
+        "properties": {
+          "aaGuids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResidentKeyRequirement": {
+        "enum": [
+          "required",
+          "preferred",
+          "discouraged"
+        ],
+        "type": "string"
+      },
+      "SendMagicLinkRequest": {
+        "required": [
+          "emailAddress",
+          "urlTemplate",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "urlTemplate": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "userId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "timeToLive": {
+            "maximum": 604800,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetFeaturesRequest": {
+        "type": "object",
+        "properties": {
+          "performedBy": {
+            "type": "string"
+          },
+          "eventLoggingRetentionPeriod": {
+            "maximum": 90,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "enableManuallyGeneratedAuthenticationTokens": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "enableMagicLinks": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignInBeginDTO": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "alias": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userVerification": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignInCompleteDTO": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "response": {
+            "$ref": "#/components/schemas/AuthenticatorAssertionRawResponse"
+          },
+          "session": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignInVerifyDTO": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SigninTokenRequest": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "userId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "timeToLive": {
+            "maximum": 604800,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StoredCredential": {
+        "type": "object",
+        "properties": {
+          "descriptor": {
+            "$ref": "#/components/schemas/PublicKeyCredentialDescriptor"
+          },
+          "publicKey": {
+            "type": "string",
+            "format": "byte"
+          },
+          "userHandle": {
+            "type": "string",
+            "format": "byte"
+          },
+          "signatureCounter": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attestationFmt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "aaGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rpid": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "readOnly": true
+          },
+          "backupState": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isBackupEligible": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isDiscoverable": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StoredCredentialListResponse": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoredCredential"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "StringAuthenticationExtensionsPRFValuesKeyValuePair": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/AuthenticationExtensionsPRFValues"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDeletePayload": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserSummary": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "aliasCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "credentialsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserSummaryListResponse": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserSummary"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserVerificationRequirement": {
+        "enum": [
+          "required",
+          "preferred",
+          "discouraged"
+        ],
+        "type": "string"
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": { }
+      },
+      "VerifySignInToken": {
+        "type": "object",
+        "properties": {
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tokenId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rpId": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "device": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "credentialId": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
