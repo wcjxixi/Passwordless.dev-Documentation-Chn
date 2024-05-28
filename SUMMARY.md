@@ -27,7 +27,7 @@
   * [高级](self-hosting/advanced.md)
 * [错误](errors.md)
 * [管理控制台](admin-console/README.md)
-  * [=应用程序](admin-console/applications.md)
+  * [应用程序](admin-console/applications.md)
   * [计费](admin-console/billing.md)
   * [管理员](admin-console/admins.md)
 * [概念](concepts.md)
