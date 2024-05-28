@@ -31,7 +31,7 @@ Content-Type: application/json
 ```
 {% endtab %}
 
-{% tab title="JavaScript" %}
+{% tab title="JS" %}
 ```javascript
 const apiUrl = "https://v4.passwordless.dev";
 
@@ -99,7 +99,7 @@ Content-Type: application/json
 ```
 {% endtab %}
 
-{% tab title="JavaScript" %}
+{% tab title="JS" %}
 ```javascript
 const apiUrl = "https://v4.passwordless.dev";
 
@@ -159,7 +159,7 @@ Content-Type: application/json
 ```
 {% endtab %}
 
-{% tab title="JavaScript" %}
+{% tab title="JS" %}
 ```javascript
 const apiUrl = 'https://v4.passwordless.dev';
 
@@ -217,7 +217,7 @@ Content-Type: application/json
 ```
 {% endtab %}
 
-{% tab title="JavaScript" %}
+{% tab title="JS" %}
 ```javascript
 const apiUrl = "https://v4.passwordless.dev";
 
@@ -266,7 +266,7 @@ ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
 ```
 {% endtab %}
 
-{% tab title="JavaScript" %}
+{% tab title="JS" %}
 ```javascript
 const apiUrl = "https://v4.passwordless.dev";
 
@@ -334,17 +334,56 @@ Content-Type: application/json
 
 成功后，`/credentials/delete` 端点将返回 HTTP 200 OK [状态代码](api.md#status-codes)。
 
+## /magic-links/send <a href="#magic-links-send" id="magic-links-send"></a>
+
+### 请求 <a href="#request" id="request"></a>
+
+向 `/magic-links/send` 端点发出的 `POST` 请求会通过 Magic Link 向提供的地址发送电子邮件。此 Magic Link 包含您提供的 URL，该 URL 会将收件人重定向到您的应用程序中的端点。从这里，您可以发送 Passwordless.dev 嵌入链接中的令牌来验证 `signin/verify` 处的令牌。
+
+{% hint style="warning" %}
+Passwordless.dev 不存储用户电子邮件。集成 Magic Links 时，您应该验证电子邮件和用户 ID 是否属于同一用户。否则，您可能会在应用程序中引入安全漏洞。
+{% endhint %}
+
+该请求必须包含所有三个字段。
+
+* `emailAddress`：Magic Link 的接收者。必须是一个有效的 E-mail 地址。
+* `urlTemplate`：这是用户单击链接时将被定向到的 URL。它应该是除令牌模板字符串 `$TOKEN` 之外的有效 URL。在发送电子邮件之前，我们会将 `$TOKEN` 与实际令牌值交换。在您的应用程序中，您应该从 URL 中解析令牌（最容易通过查询参数完成，如下所示）并将其发送到 `signin/verify` 端点以验证请求。
+* `userId`：电子邮件目标用户的标识符。
+* `timeToLive`：（可选）魔术链接令牌有效的秒数。如果未设置，则默认值为 1 小时。
+
+```http
+POST https://v4.passwwordless.dev/magic-links/send HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "emailAddress": "user-email@example.com",
+  "urlTemplate": "https://www.myapp.com?token=$TOKEN"
+  "userId": "c8a32e5b-46d3-4808-ae10-16d3e26ff6f9"
+  "timeToLive": 3600
+}
+```
+
+### 响应 <a href="#response" id="response"></a>
+
+如果成功， `/magic-links/send` 端点将返回 HTTP 204（无内容）[状态代码](api.md#status-codes)。
+
+如果尚未启用 Magic Link， `/magic-links/send` 端点将返回 HTTP 403（未经授权）[状态代码](api.md#status-codes)以及有关启用 Magic Link 功能的消息。
+
 ## 状态代码 <a href="#status-codes" id="status-codes"></a>
 
 API 会为每一个请求返回 HTTP 状态代码。
 
 如果您收到错误，您还将收到[问题详细信息](errors.md#problem-details)形式的 JSON 序列化的错误摘要。有关详细信息，请参阅[错误页面](errors.md)。
 
-| HTTP 代码 | 消息           | 状态 |
-| ------- | ------------ | -- |
-| 200     | 一切正常。        | ✅  |
-| 201     | 一切正常，但空空如也。  | ✅  |
-| 400     | 错误请求。        | 🔴 |
-| 401     | 您没有表明自己的身份。  | 🔴 |
-| 409     | 冲突（别名已被使用）。  | 🔴 |
-| 500     | 我们这边出了很大的问题。 | 🔴 |
+| HTTP 代码 | 消息                                                  | 状态 |
+| ------- | --------------------------------------------------- | -- |
+| 200     | 一切正常。                                               | ✅  |
+| 201     | 一切正常，资源已创建。                                         | ✅  |
+| 204     | 一切正常，响应为空。                                          | ✅  |
+| 400     | 错误请求（详情请参阅[问题详细信息](errors.md#problem-details)）。     | 🔴 |
+| 401     | 您没有表明自己的身份。                                         | 🔴 |
+| 403     | 您无权执行该操作（详情请参阅[问题详细信息](errors.md#problem-details)）。 | 🔴 |
+| 409     | 冲突（详情请参阅[问题详细信息](errors.md#problem-details)）。       | 🔴 |
+| 429     | 请求次数过多（详情请参阅[问题详细信息](errors.md#problem-details)）。   | 🔴 |
+| 500     | 我们这边出了很大的问题。                                        | 🔴 |

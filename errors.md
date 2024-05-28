@@ -32,6 +32,17 @@ if(error) {
 
 ## 错误代码列表 <a href="#list-of-error-codes" id="list-of-error-codes"></a>
 
+### api\_key\_locked <a href="#api-key-locked" id="api-key-locked"></a>
+
+当您使用已锁定的 API 密钥调用端点时，您将收到此错误。
+
+发生这种情况的原因有多种：
+
+* 要么您自己锁定了 API 密钥。
+* 您的应用程序被标记为删除，这会导致 API 密钥自动锁定。
+
+如果这是无意的，您可以在[管理控制台](admin-console/applications.md#api-key-management)中解锁 API 密钥。
+
 ### invalid\_token <a href="#invalid-token" id="invalid-token"></a>
 
 提交的令牌不包含预期值。这种错误通常发生在流程早期出错时，发送的是错误信息而不是有效令牌。
@@ -61,6 +72,10 @@ if(error) {
 #### **解决方法** <a href="#solution" id="solution"></a>
 
 从用户设备中删除通行密钥。这可以在浏览器的设置或操作系统的凭据管理器中完成。
+
+### forbidden  <a href="#forbidden" id="forbidden"></a>
+
+当您使用无权访问端点的 API 密钥调用端点时，您将收到此错误。请在管理控制台中检查 [API 密钥权限](admin-console/applications.md#api-key-management)。
 
 ### missing\_userid <a href="#missing-userid" id="missing-userid"></a>
 
@@ -118,6 +133,10 @@ if(error) {
 
 当您调用 `/register/token` 端点时，请移除 `attestation` 属性或将值更改为 `"none"`。
 
+### attestation\_not\_supported\_on\_plan <a href="#attestation-not-supported-on-plan" id="attestation-not-supported-on-plan"></a>
+
+当您在调用 `/register/token` 时尝试使用 `"none"` 以外的证明格式，但您的计划不支持时，您会收到此错误。在[这里](https://bitwarden.com/products/passwordless/#pricing)了解更多。
+
 ### max\_users\_exceeded <a href="#max-users-reached" id="max-users-reached"></a>
 
 当您尝试创建新的用户但已达到计划的最大用户数时，您会收到此错误。
@@ -125,3 +144,19 @@ if(error) {
 现有用户仍然可以添加其他凭据。
 
 您可以在此处[了解更多](https://bitwarden.com/products/passwordless/)。
+
+### magic\_link\_email\_admin\_address\_only <a href="#magic-link-email-admin-address-only" id="magic-link-email-admin-address-only"></a>
+
+当您尝试在最近创建的应用程序上请求魔法链接电子邮件时，您会收到此错误。作为避免垃圾邮件的措施，您只能向您自己的（即应用程序管理员）电子邮件地址请求电子邮件。
+
+#### **解决方法** <a href="#solution" id="solution"></a>
+
+等待 24 小时，直到此限制消失。
+
+### magic\_link\_email\_quota\_exceeded <a href="#magic-link-email-quota-exceeded" id="magic-link-email-quota-exceeded"></a>
+
+当您的每月电子邮件配额已达到后，尝试请求魔法链接电子邮件时，您会收到此错误。已发送的电子邮件按滑动窗口计算，因此您可能只需要等待一两天即可再次发送电子邮件。
+
+#### **解决方法** <a href="#solution" id="solution"></a>
+
+等待 24 小时，直到重新计算您的剩余配额。从长远来看，请考虑升级到更高级别的计划以支持更多外发电子邮件。

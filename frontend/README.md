@@ -6,7 +6,8 @@
 
 ## 客户端库 <a href="#client-libraries" id="client-libraries"></a>
 
-* [JavaScript 客户端](javascript.md)
+* [Android](android.md)
+* [JavaScript](javascript.md)
 
 ## 框架示例 <a href="#framework-examples" id="framework-examples"></a>
 
