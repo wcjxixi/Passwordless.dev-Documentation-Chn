@@ -14,7 +14,7 @@
   * [PHP](backend/php.md)
   * [Python 2](backend/python2.md)
   * [Python 3+](backend/python3.md)
-  * [=创建 SDK](backend/create-a-sdk.md)
+  * [创建 SDK](backend/create-a-sdk.md)
 * [前端](frontend/README.md)
   * [JavaScript](frontend/javascript.md)
   * [=Android](frontend/android.md)
