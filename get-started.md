@@ -103,7 +103,7 @@ const p = new Client({});
 
 1、在后端，通过调用 passwordless.dev API 的 `/register/token` 端点生成一个[注册令牌](api.md#register-token)（[什么是令牌？](concepts.md#tokens)）。虽然您可以发送多个选项，但最少的参数是 `userId` 和 `username`，例如：
 
-<mark style="background-color:orange;">后端</mark>
+<kbd><mark style="background-color:orange;">**后端**<mark style="background-color:orange;"></kbd>
 
 ```javascript
 // Node.js - 为此步骤编写的代码应在您的后端运行。
@@ -138,7 +138,7 @@ const {token} = await fetch(apiUrl + "/register/token", {
 
 2、在前端，发起 WebAuthn 流程以使用已生成的注册令牌创建和存储通行密钥（[了解更多](frontend/javascript.md)），例如：
 
-<mark style="background-color:orange;">前端</mark>
+<kbd><mark style="background-color:blue;">**前端**<mark style="background-color:blue;"></kbd>
 
 ```javascript
 // 为此步骤编写的代码应在您的前端运行。
