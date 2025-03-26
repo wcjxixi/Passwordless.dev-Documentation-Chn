@@ -4,11 +4,11 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/concepts.html)
 {% endhint %}
 
-> \[**译者注**]：[CATP](https://en.wikipedia.org/wiki/Client_to_Authenticator_Protocol)：Client to Authenticator Protocol（客户端到验证器协议）
-
 ## FIDO2 <a href="#fido2" id="fido2"></a>
 
 FIDO2 是万维网联盟 (W3C) 关于网络身份验证 (WebAuthn) 和客户端到验证器协议 (CTAP) 的标准规范。制定 FIDO 身份验证标准是为了提供比标准密码和 SMS 2FA 更安全的身份验证。使用 FIDO 身份验证标准可以提供一种安全的体验，让消费者更容易使用，让开发人员更容易实施。有关 FIDO 的更多信息，请访问 [FIDO Alliance](https://fidoalliance.org/fido2/)。
+
+> \[**译者注**]：[CATP](https://en.wikipedia.org/wiki/Client_to_Authenticator_Protocol)：Client to Authenticator Protocol（客户端到验证器协议）
 
 FIDO2 由 **WebAuthn** 和 **CTAP** 两个标准化组件组成。这些标准的共同作用是创造一种安全的无密码体验。
 
@@ -118,27 +118,37 @@ FIDO2 身份验证器有两种类型：
 | `indirect`   | 企业  | 验证器包含来自 Attestation Certificate Authority (AttCA) 的签名声明。来自 AttCA 的 Attestation 声明提供了验证器的特征的加密证明，增强了 Attestation 过程的安全性。 |
 | `enterprise` | n/a | 为企业提供了唯一识别验证器的功能，以确定它们是否被批准在受保护环境中使用。                                                                                   |
 
+> **\[译者注]**：Attestation Certificate Authority (AttCA)，其作用是确保认证器的可信性，从而增强 WebAuthn 注册过程的安全性。
+>
+> AttCA 是 WebAuthn/FIDO 生态中的一种特殊证书颁发机构 (CA)，专门负责为 验证器 (Authenticator) 签发 Attestation 证书，用于证明该认证器的合法性和安全性。
+>
+> 厂商（如 Yubico、Apple、Google）的验证器在出厂时，会预装由 AttCA 签发的证书，用于在 WebAuthn 注册阶段向依赖方 (Relying Party) 证明其身份。
+>
+> 依赖方（如网站服务器）可通过验证 AttCA 的证书链，确认该验证器是否来自受信任的厂商，并符合安全标准（如 FIDO Certified）。
+>
+> Root CA 通常指 PKI 体系的顶级 CA，而 AttCA 可能是其下级。
+
 依赖方可以使用 Attestation 信息做出是否信任验证器的明智决定，并评估用户设备提供的安全级别。值得注意的是，虽然 Attestation 能增强安全性，但它并不是 WebAuthn 基本操作的强制性要求。在没有 Attestation 的情况下，WebAuthn 仍可正常工作，但建议使用 Attestation 来增强安全性。
 
 ### Attestation 配置 <a href="#authentication-configurations" id="authentication-configurations"></a>
 
 Attestation 配置允许您配置在 `signin()` 和 `stepup()` 客户端方法中使用的认证令牌。每个方法都将参数传递给浏览器访问的认证器。Attestation 配置允许为给定的认证工作流程设置认证令牌的生存时间和用户验证要求设置。还有其他可用的配置选项。
 
-每个应用程序都有两种默认的 Attestation 配置，分别是 `step-up` 和 `sign-in`。它们分别作为认证的 `purpose` 在各自的客户端方法中使用。它们可以被编辑，如果被删除，将恢复到默认设置。Attestation 配置可以通过 [API](api.md#auth-configs) 或管理控制台访问。
+每个应用程序都有两种默认的 Attestation 配置，分别是 `step-up` 和 `sign-in`。它们分别作为认证的 `purpose` 在各自的客户端方法中使用。它们可以被编辑，如果被删除，将恢复到默认设置。Attestation 配置可以通过 [API](api.md#auth-configs) 或[管理控制台](admin-console/applications.md#authentication-configurations)访问。
 
 ### 凭据提示 <a href="#credential-hints" id="credential-hints"></a>
 
-在执行登录操作时，Passwordless.dev API 可以为用户代理提供如何最好地认证用户的提示。这些提示不是强制性的，用户代理有权选择如何响应它们。
+在执行登录操作时，Passwordless.dev API 可以为用户代理提供如何最好地对用户进行身份验证的提示。这些提示不是强制性的，用户代理有权选择如何响应它们。
 
 以下是一些可用的提示：
 
 * `SecurityKey` - 用户代理应使用安全密钥进行身份验证。
 * `ClientDevice` - 用户代理应使用设备的内置验证器进行身份验证。
-* `Hybrid` - 用户代理应使用通用验证器进行身份验证，例如智能手机。
+* `Hybrid` - 用户代理应使用通用的验证器进行身份验证，例如智能手机。
 
-凭证提示可以按顺序组合成一个列表，以向用户代理提供用户身份验证的偏好。用户代理应使用列表中它能满足的第一个提示。
+凭据提示可以按顺序组合成一个列表，以向用户代理提供用户身份验证的偏好。用户代理应使用列表中它能满足的第一个提示。
 
-在 Passwordless.dev 中，凭证提示是作为身份验证配置的一部分进行配置的。
+在 Passwordless.dev 中，凭据提示是作为身份验证配置的一部分进行配置的。
 
 ## 更多术语 <a href="#more-terms" id="more-terms"></a>
 
