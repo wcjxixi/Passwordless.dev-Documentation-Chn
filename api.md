@@ -370,6 +370,33 @@ Content-Type: application/json
 
 如果尚未启用 Magic Link， `/magic-links/send` 端点将返回 HTTP 403（未经授权）[状态代码](api.md#status-codes)以及有关启用 Magic Link 功能的消息。
 
+## /auth-configs/list <a href="#auth-configs-list" id="auth-configs-list"></a>
+
+### 请求 <a href="#request" id="request"></a>
+
+### 响应 <a href="#response" id="response"></a>
+
+/auth-configs/add
+
+
+### 请求 <a href="#request" id="request"></a>
+
+### 响应 <a href="#response" id="response"></a>
+
+/auth-configs/
+
+
+### 请求 <a href="#request" id="request"></a>
+
+### 响应 <a href="#response" id="response"></a>
+
+/auth-configs/delete
+
+
+### 请求 <a href="#request" id="request"></a>
+
+### 响应 <a href="#response" id="response"></a>
+
 ## 状态代码 <a href="#status-codes" id="status-codes"></a>
 
 API 会为每一个请求返回 HTTP 状态代码。

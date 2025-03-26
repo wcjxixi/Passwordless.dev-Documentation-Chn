@@ -4,7 +4,7 @@
 对应的[官方页面地址](https://docs.passwordless.dev/guide/concepts.html)
 {% endhint %}
 
-> \[**译者注**]：[CATP](https://en.wikipedia.org/wiki/Client\_to\_Authenticator\_Protocol)：Client to Authenticator Protocol（客户端到验证器协议）
+> \[**译者注**]：[CATP](https://en.wikipedia.org/wiki/Client_to_Authenticator_Protocol)：Client to Authenticator Protocol（客户端到验证器协议）
 
 ## FIDO2 <a href="#fido2" id="fido2"></a>
 
@@ -101,9 +101,46 @@ FIDO2 身份验证器有两种类型：
 
 此外，Passwordless.dev 还使用其他类型的令牌用于特殊目的：
 
-* **手动生成的身份验证令牌**，由私有 API 通过对 `/signin/generate-token` 端点的请求创建。该令牌的权重与常规身份验证令牌相同，但它是手动生成的，绕过了常规身份验证流程。它主要用于方便账户恢复和通过魔法链接登录。。
+* **手动生成的身份验证令牌**，由私有 API 通过对 `/signin/generate-token` 端点的请求创建。该令牌的权重与常规身份验证令牌相同，但它是手动生成的，绕过了常规身份验证流程。它主要用于方便账户恢复和通过魔法链接登录。
 
-## 更多 <a href="#more-terms" id="more-terms"></a>
+### Attestation
+
+{% hint style="warning" %}
+仅我们的「企业」计划中支持 Attestation。[了解更多](https://bitwarden.com/products/passwordless/#pricing)有关我们的计划的信息。
+{% endhint %}
+
+虽然 WebAuthn 非常安全，但 Attestation 通过允许依赖方接收和验证有关验证器的信息，从而增强了 WebAuthn 注册过程的安全性。
+
+| 类型           | 计划  | 描述                                                                                                                      |
+| ------------ | --- | ----------------------------------------------------------------------------------------------------------------------- |
+| `none`       | 所有  | 验证器提供其 Attestation 信息，但没有有意义的加密签名。与其它 Attestation 类型相比，安全性较低，通常在依赖方不需要强有力地证明验证器特征时使用。                                   |
+| `direct`     | 企业  | 验证器直接向依赖方提供其 Attestation 信息。然而，需要注意的是，「直接」Attestation 实际上等同于「自我 Attestation」。验证器对其自身属性做出声明，而不涉及第三方 Attestation 凭据。      |
+| `indirect`   | 企业  | 验证器包含来自 Attestation Certificate Authority (AttCA) 的签名声明。来自 AttCA 的 Attestation 声明提供了验证器的特征的加密证明，增强了 Attestation 过程的安全性。 |
+| `enterprise` | n/a | 为企业提供了唯一识别验证器的功能，以确定它们是否被批准在受保护环境中使用。                                                                                   |
+
+依赖方可以使用 Attestation 信息做出是否信任验证器的明智决定，并评估用户设备提供的安全级别。值得注意的是，虽然 Attestation 能增强安全性，但它并不是 WebAuthn 基本操作的强制性要求。在没有 Attestation 的情况下，WebAuthn 仍可正常工作，但建议使用 Attestation 来增强安全性。
+
+### Attestation 配置 <a href="#authentication-configurations" id="authentication-configurations"></a>
+
+Attestation 配置允许您配置在 `signin()` 和 `stepup()` 客户端方法中使用的认证令牌。每个方法都将参数传递给浏览器访问的认证器。Attestation 配置允许为给定的认证工作流程设置认证令牌的生存时间和用户验证要求设置。还有其他可用的配置选项。
+
+每个应用程序都有两种默认的 Attestation 配置，分别是 step-up 和 sign-in。它们分别作为认证的 `purpose` 在各自的客户端方法中使用。它们可以被编辑，如果被删除，将恢复到默认设置。Attestation 配置可以通过 API 或管理控制台访问。
+
+### 凭据提示 <a href="#credential-hints" id="credential-hints"></a>
+
+在执行登录操作时，Passwordless.dev API 可以为用户代理提供如何最好地认证用户的提示。这些提示不是强制性的，用户代理有权选择如何响应它们。
+
+以下是一些可用的提示：
+
+* `SecurityKey` - 用户代理应使用安全密钥进行身份验证。
+* `ClientDevice` - 用户代理应使用设备的内置验证器进行身份验证。
+* `Hybrid` - 用户代理应使用通用验证器进行身份验证，例如智能手机。
+
+凭证提示可以按顺序组合成一个列表，以向用户代理提供用户身份验证的偏好。用户代理应使用列表中它能满足的第一个提示。
+
+在 Passwordless.dev 中，凭证提示是作为身份验证配置的一部分进行配置的。
+
+## 更多术语 <a href="#more-terms" id="more-terms"></a>
 
 ### 依赖方 <a href="#relying-party" id="relying-party"></a>
 

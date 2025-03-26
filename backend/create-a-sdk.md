@@ -51,7 +51,7 @@
 
 配置自动化测试和 CI / CD（例如 GitHub Actions）以确保质量。
 
-## 语言 SDK 与框架 SDK <a href="#language-sdk-vs-framework-sdk" id="language-sdk-vs-framework-sdk"></a>
+## 语言 SDK vs. 框架 SDK <a href="#language-sdk-vs-framework-sdk" id="language-sdk-vs-framework-sdk"></a>
 
 我们鼓励使用不同风格的 SDK 和集成，如下所述：
 

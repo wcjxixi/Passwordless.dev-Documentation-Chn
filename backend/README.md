@@ -12,3 +12,11 @@
 * [PHP](php.md)
 * [Python 2](python2.md)
 * [Python 3](python3.md)
+
+非官方社区 SDK：
+
+这些 SDK 由社区开发。它们不是由 Bitwarden 开发、支持或审核的。
+
+* [Rust (by davidzr)](https://github.com/davidzr/passwordless-rust)
+* [Go (by AJAYK-01)](https://github.com/AJAYK-01/passwordless-go)
+* [Java Spring Boot (by sanjanarjn)](https://github.com/sanjanarjn/spring-boot-starter-passwordless)

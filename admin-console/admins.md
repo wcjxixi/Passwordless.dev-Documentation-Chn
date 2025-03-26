@@ -8,7 +8,7 @@
 
 {% embed url="https://docs.passwordless.dev/assets/img/admin-page.43025c60.png" %}
 
-要邀请一位管理员：
+要邀请管理员：
 
 * 在**受邀者**文本输入框中输入电子邮件地址，然后选择**发送邀请**。
 * 您的未来的管理员将收到一封邀请电子邮件。指导他们使用此邀请完成 Passwordless.dev 注册，然后遵循电子邮件中的验证步骤。
