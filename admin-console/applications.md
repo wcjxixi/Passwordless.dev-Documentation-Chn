@@ -22,11 +22,11 @@
 
 通过**用户**页面，您可以监控为应用程序注册了通行密钥的终端用户。对于每个用户，根据他们的 userId，您将能够查看：
 
-### **凭据** <a href="#credentials" id="credentials"></a>
+### 凭据 <a href="#credentials" id="credentials"></a>
 
 列出了每个用户已注册的凭据。[了解每个凭证存储了哪些数据](../concepts.md#credential)。
 
-### **别名** <a href="#aliases" id="aliases"></a>
+### 别名 <a href="#aliases" id="aliases"></a>
 
 列出了每个用户已注册的别名，但此处无法查看经过哈希处理的别名（[了解更多](../api.md#alias)）。
 
@@ -56,3 +56,9 @@
 Magic Links 使您能够通过电子邮件向用户发送一个链接，将他们重定向到您的应用程序，而无需配置您自己的电子邮件提供商。要启用此功能，请转到 **Setting** 页面，滚动到 **Magic Links** 部分，选中该复选框，然后点击**保存**。
 
 您现在可以调用 `https://v4.passwordless.dev/magic-links/send` 向您的用户发送 Magic Link 电子邮件了。更多信息，请参阅[此文档](../api.md#magic-links-send)。
+
+### 身份验证配置 <a href="#authentication-configurations" id="authentication-configurations"></a>
+
+身份验证配置允许您微调通过 `sign-in` 和 `step-up` 客户端方法使用的令牌。两个默认目的是 `sign-in` 和 `step-up`，而且不能删除。您可以根据需要创建其他配置，并通过 `stepup()` 客户端方法传递目的。
+
+对于每个身份验证配置（包括内置配置），您都可以配置每个配置的 TTL、更改用户验证要求和修改其他一些选项。
