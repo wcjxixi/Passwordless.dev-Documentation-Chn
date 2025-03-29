@@ -1,16 +1,16 @@
-# =Android
+# Android
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/frontend/android.html)
 {% endhint %}
 
-Passwordless.dev Android 客户端 SDK 使用户能够利用设备的内置指纹传感器和/或 FIDO 安全密钥，对支持 FIDO2 协议的网站和本机应用程序进行安全无密码访问。
+Passwordless.dev Android 客户端 SDK 使用户能够利用设备的内置指纹传感器和/或 FIDO 安全密钥，对支持 FIDO2 协议的网站和本机应用程序进行安全的无密码访问。
 
 ## 要求 <a href="#requirements" id="requirements"></a>
 
 * Android 9.0（API 级别 28）或更高版本
 * Java 8 或更高版本
-* [已完成「入门」指南](../get-started.md)
+* [已完成「入门」指南](../../get-started.md)
 
 ## 安装 <a href="#installation" id="installation"></a>
 
@@ -88,53 +88,6 @@ data class PasswordlessOptions(
 </resources>
 ```
 
-### Facet ID <a href="#facet-id" id="facet-id"></a>
-
-`Facet ID` 将在本指南后面用作 `origin` 。
-
-要获取 Facet ID，请继续以下步骤。Facet ID 通常如下所示：`android:apk-key-hash:POIplOLeHuvl-XAQckH0DwY4Yb1ydnnKcmhn-jibZbk`
-
-1、在终端中执行以下命令：
-
-{% tabs %}
-{% tab title="Bash" %}
-```sh
-# Linux, Mac OS, Git Bash, ...
-keytool -list -v -keystore ~/.android/debug.keystore | grep "SHA256: " | cut -d " " -f 3 | xxd -r -p | basenc --base64url | sed 's/=//g'
-```
-{% endtab %}
-
-{% tab title="Powershell" %}
-```powershell
-# Run keytool command and extract SHA256 hash
-$keytoolOutput = keytool -list -v -keystore $HOME\.android\debug.keystore
-$sha256Hash = ($keytoolOutput | Select-String "SHA256: ").ToString().Split(" ")[2]
-
-# Remove any non-hex characters from the hash
-$hexHash = $sha256Hash -replace "[^0-9A-Fa-f]"
-
-# Convert the hexadecimal string to a byte array
-$byteArray = [byte[]]@()
-for ($i = 0; $i -lt $hexHash.Length; $i += 2) {
-  $byteArray += [byte]([Convert]::ToUInt32($hexHash.Substring($i, 2), 16))
-}
-
-# Convert the byte array to a base64 string
-$base64String = [Convert]::ToBase64String($byteArray)
-
-# Convert the base64 string to a base64url string
-$base64urlString = $base64String -replace '\+', '-' -replace '/', '_' -replace '=+$', ''
-
-Write-Output $base64urlString
-```
-{% endtab %}
-{% endtabs %}
-
-2、调试密钥库的默认密码是 `android` 。对于您的生产密钥库，输入您选择的密码。
-
-3、现在将结果附加到 `android:apk-key-hash:` 以获取 Facet ID：\
-`android:apk-key-hash:POIplOLeHuvl-XAQckH0DwY4Yb1ydnnKcmhn-jibZbk`
-
 ## 配置（您的后端） <a href="#configuration-your-back-end" id="configuration-your-back-end"></a>
 
 ### 获取 SHA-256 证书指纹 <a href="#obtaining-the-sha-256-certificate-fingerprints" id="obtaining-the-sha-256-certificate-fingerprints"></a>
@@ -204,10 +157,137 @@ keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androi
 
 ## 使用 PasswordlessClient <a href="#using-the-passwordlessclient" id="using-the-passwordlessclient"></a>
 
+
+
+{% tabs %}
+{% tab title="使用 Dagger Hilt" %}
+您可以通过注入 Dagger Hilt 来设置 `ActivityContext` 和 `CoroutineScope`，方法如下：
+
+```kotlin
+@Module
+@InstallIn(ActivityComponent::class)
+class PasswordlessModule {
+    @Provides
+    fun provideLifecycleCoroutineScope(activity: Activity): LifecycleCoroutineScope =
+        (activity as AppCompatActivity).lifecycleScope
+
+    @Provides
+    @ActivityScoped
+    fun providePasswordlessClient(
+        @ActivityContext activity: Context, scope: LifecycleCoroutineScope): PasswordlessClient {
+        val options = PasswordlessOptions(
+            DemoPasswordlessOptions.API_KEY,
+            DemoPasswordlessOptions.RP_ID,
+            DemoPasswordlessOptions.ORIGIN,
+            DemoPasswordlessOptions.API_URL
+        )
+
+        return PasswordlessClient(options, activity, scope)
+    }
+}
+```
+{% endtab %}
+
+{% tab title="不使用 Dagger Hilt" %}
+或者也可以手动设置无密码客户端的上下文。确保上下文设置为当前 `Activity`。
+
+<pre class="language-kotlin"><code class="lang-kotlin">/** 需要根据当前活动设置上下文
+ * 如果有不同的活动处理寄存器和签名，
+<strong> * 然后在每个活动中调用它
+</strong>*/
+_passwordless.setContext(this)
+</code></pre>
+
+设置 Coroutine 范围，传递当前片段的 lifecycleScope，只有在您再次不使用 Dagger Hilt 的情况下才有必要。
+
+```kotlin
+_passwordless.setCoroutineScope(lifecycleScope)
+```
+{% endtab %}
+{% endtabs %}
+
 ## 注册 <a href="#registration" id="registration"></a>
+
+1. 用户界面 (UI)：
+   * （必填）指定凭据的用户名。
+   * （可选）如果是不可发现的凭据，则将用户作为别名输入。
+2. 调用 **`your backend`** 实现的 `POST /register/token`：您的后端应调用 Passwordless.de API 生成注册令牌。
+   * 参阅 [API 文档](../../api.md#register-token)
+3. 调用 `PasswordlessClient.register()`：
+
+```kotlin
+// 将注册令牌传递给 PasswordlessClient.register()
+_passwordless.register(
+    token = responseToken,
+    nickname = nickname
+) { success, exception, result ->
+    if (success) {
+        Toast.makeText(context, result.toString(), Toast.LENGTH_SHORT).show()
+    } else {
+        Toast.makeText(context, "Exception: " + getPasskeyFailureMessage(exception as Exception), Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+
 
 ## 登录 <a href="#logging-in" id="logging-in"></a>
 
+1. 用户界面 (UI)：（可选）如果是不可发现的凭据，则将用户作为别名输入。
+2. 调用 `PasswordlessClient.login()`：使用（可选）别名和响应回调启动登录过程。
+3. 调用 `your backend` 实现的 `POST /register/token`：您的后端应调用 Passwordless.de API 生成注册令牌。
+   * 参阅 [API 文档](../../api.md#register-token)
+
+```kotlin
+// 使用别名调用 PasswordlessClient.login()
+_passwordless.login(alias) { success, exception, result ->
+    if (success) {
+        lifecycleScope.launch {
+            // 成功后，调用后端验证令牌，例如返回一个 JWT 令牌。
+            val clientDataResponse = httpClient.login(UserLoginRequest(result?.token!!))
+            if (clientDataResponse.isSuccessful) {
+                // 登录成功。 解析响应或 JWT 令牌并继续。
+                val data = clientDataResponse.body()
+                showText(data.toString())
+            }
+        }
+    } else {
+        showException(exception)
+    }
+}
+```
+
 ## 示例 <a href="#sample" id="sample"></a>
 
+您可以在[这里](https://github.com/bitwarden/passwordless-android/tree/main/app)找到示例应用程序的源代码。
+
+{% tabs %}
+{% tab title="注册 1" %}
+{% embed url="https://docs.passwordless.dev/assets/register_1-CtQIHsm_.png" %}
+{% endtab %}
+
+{% tab title="注册 2" %}
+{% embed url="https://docs.passwordless.dev/assets/register_2-CNsiRMHG.png" %}
+{% endtab %}
+
+{% tab title="登录 1" %}
+{% embed url="https://docs.passwordless.dev/assets/login_1-1GH5b4rj.png" %}
+{% endtab %}
+
+{% tab title="登录 2" %}
+{% embed url="https://docs.passwordless.dev/assets/login_2-D_RgitXZ.png" %}
+{% endtab %}
+
+{% tab title="登录 3" %}
+{% embed url="https://docs.passwordless.dev/assets/login_3-Cdru5hSl.png" %}
+{% endtab %}
+{% endtabs %}
+
 ## 参考 <a href="#references" id="references"></a>
+
+* [入门 - Passwordless.dev](../../get-started.md)
+* [使用您的后端集成 - Passwordless.dev](../../backend/)
+* [客户端身份验证 - Google](https://developers.google.com/android/guides/client-auth?hl=zh-cn)
+* [关联应用程序和网站 - Google](https://developers.google.com/identity/smartlock-passwords/android/associate-apps-and-sites?hl=zh-cn)
+* [通行密匙 - Google](https://developer.android.com/identity/sign-in/credential-manager?hl=zh-cn)
+* [故障排除 - Android 客户端 SDK - Passwordless.dev](troubleshooting.md)

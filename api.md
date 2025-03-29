@@ -1,4 +1,4 @@
-# =后端 API 参考
+# 后端 API 参考
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/api.html)
@@ -390,26 +390,120 @@ ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
 
 ### 响应 <a href="#response" id="response"></a>
 
+如果成功，`/auth-configs/list` 端点将返回一个 `.json` 对象，其中包含一个身份验证配置列表：
+
+```json
+{
+  "configurations": [
+    {
+      "purpose": "sign-in",
+      "timeToLive": 120,
+      "userVerificationRequirement": "preferred",
+      "createdBy": "System",
+      "createdOn": null,
+      "editedBy": null,
+      "editedOn": null,
+      "lastUsedOn": null
+    },
+    {
+      "purpose": "step-up",
+      "timeToLive": 180,
+      "userVerificationRequirement": "required",
+      "createdBy": "System",
+      "createdOn": null,
+      "editedBy": null,
+      "editedOn": null,
+      "lastUsedOn": null
+    }
+  ]
+}
+```
+
 /auth-configs/add
 
 
 ### 请求 <a href="#request" id="request"></a>
 
+对 `/auth-configs/add` 的 `POST` 请求将为身份验证流程创建一个身份验证配置。请求对象有一些限制：
+
+* `purpose`：A-z、0-9、- 和 \_ 是允许使用的字符。其最大长度为 255 个字符。
+* `timeToLive`：正向时间跨度值 (hh:mm:ss)
+* `userVerificationRequirement`：`preferred`，`required`，`discouraged`
+* `pedressedBy`：跟踪配置更改的用户标识符
+
+```http
+GET https://v4.passwordless.dev/auth-configs/add HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "purpose": "access-secrets-purpose", // identifying string give context to the specific authentication
+  "timeToLive": "00:03:00", // timespan the token is valid for
+  "userVerificationRequirement": "preferred", // requirement for if the user has to verify they're allowed to use an authenticator
+  "performedBy": "user_123" // user identifier to track changes to the configuration
+}
+```
+
 ### 响应 <a href="#response" id="response"></a>
+
+如果成功，`/auth-configs/add` 端点将返回 HTTP 201（已创建）[状态代码](api.md#status-codes)。
+
+如果不成功，`/auth-configs/add` 端点将返回 HTTP 400（错误请求）[状态代码](api.md#status-codes)，并附带[问题详情信息](errors.md#problem-details)正文。
 
 /auth-configs/
 
 
 ### 请求 <a href="#request" id="request"></a>
 
+对 `/auth-configs` 的 `POST` 请求将编辑身份验证流程的身份验证配置。请求对象有一些限制：
+
+* `purpose`：必须是现有的 purpose（如果在此传递新的 purpose，将返回 404）
+* `timeToLive`：正时间跨度值 (hh:mm:ss)
+* `userVerificationRequirement`：`preferred`，`required`，`discouraged`
+* `pedicatedBy`：用于跟踪配置更改的用户标识符
+
+```http
+GET https://v4.passwordless.dev/auth-configs HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "purpose": "access-secrets-purpose", // existing purpose
+  "timeToLive": "00:03:00", // timespan the token is valid for
+  "userVerificationRequirement": "preferred", // requirement for if the user has to verify they're allowed to use an authenticator
+  "performedBy": "user_123" // user identifier to track changes to the configuration
+}
+```
+
 ### 响应 <a href="#response" id="response"></a>
+
+如果成功，`/auth-configs` 端点将返回 HTTP 204（无内容）[状态代码](api.md#status-codes)。
+
+如果目的不明，`/auth-configs` 端点将返回 HTTP 404（未找到）[状态代码](api.md#status-codes)。
 
 /auth-configs/delete
 
 
 ### 请求 <a href="#request" id="request"></a>
 
+向 `/auth-configs/delete` 端点发出的 `POST` 请求会删除特定的身份验证配置，该配置由 `purpose` 指定。
+
+```http
+GET https://v4.passwordless.dev/auth-configs/add HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+Content-Type: application/json
+
+{
+  "purpose": "access-secrets-purpose", // existing purpose
+  "performedBy": "user_123" // user identifier to track changes to the configuration
+}
+```
+
 ### 响应 <a href="#response" id="response"></a>
+
+如果成功，`/auth-configs/delete` 端点将返回 HTTP 204（无内容）[状态代码](api.md#status-codes)。
+
+如果目的不明，`/auth-configs/delete` 端点将返回 HTTP 404（未找到）[状态代码](api.md#status-codes)。
 
 ## 状态代码 <a href="#status-codes" id="status-codes"></a>
 

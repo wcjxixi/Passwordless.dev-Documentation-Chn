@@ -6,7 +6,7 @@
 
 ## 客户端库 <a href="#client-libraries" id="client-libraries"></a>
 
-* [Android](android.md)
+* [Android](android/)
 * iOS
 * [JavaScript](javascript.md)
 
