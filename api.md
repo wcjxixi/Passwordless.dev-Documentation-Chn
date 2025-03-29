@@ -1,4 +1,4 @@
-# 后端 API 参考
+# =后端 API 参考
 
 {% hint style="success" %}
 对应的[官方页面地址](https://docs.passwordless.dev/guide/api.html)
@@ -373,6 +373,20 @@ Content-Type: application/json
 ## /auth-configs/list <a href="#auth-configs-list" id="auth-configs-list"></a>
 
 ### 请求 <a href="#request" id="request"></a>
+
+向 `/auth-configs/list` 端点发出的 `GET` 请求将返回一个 `.json` 对象，其中包含应用程序可使用的身份验证配置列表。通过将目的名称作为查询参数，可以筛选出特定的配置。
+
+```http
+GET https://v4.passwordless.dev/auth-configs/list HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+```
+
+```http
+GET https://v4.passwordless.dev/auth-configs/list?purpose=step-up HTTP/1.1
+ApiSecret: myapplication:secret:11f8dd7733744f2596f2a28544b5fbc4
+```
+
+有关身份验证配置的更多信息，请参阅[概念页面](concepts.md#authentication-configurations)。
 
 ### 响应 <a href="#response" id="response"></a>
 

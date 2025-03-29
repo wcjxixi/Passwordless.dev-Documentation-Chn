@@ -130,11 +130,11 @@ FIDO2 身份验证器有两种类型：
 
 依赖方可以使用 Attestation 信息做出是否信任验证器的明智决定，并评估用户设备提供的安全级别。值得注意的是，虽然 Attestation 能增强安全性，但它并不是 WebAuthn 基本操作的强制性要求。在没有 Attestation 的情况下，WebAuthn 仍可正常工作，但建议使用 Attestation 来增强安全性。
 
-### Attestation 配置 <a href="#authentication-configurations" id="authentication-configurations"></a>
+### 验证配置 <a href="#authentication-configurations" id="authentication-configurations"></a>
 
-Attestation 配置允许您配置在 `signin()` 和 `stepup()` 客户端方法中使用的认证令牌。每个方法都将参数传递给浏览器访问的认证器。Attestation 配置允许为给定的认证工作流程设置认证令牌的生存时间和用户验证要求设置。还有其他可用的配置选项。
+验证配置允许您配置在 `signin()` 和 `stepup()` 客户端方法中使用的认证令牌。每个方法都将参数传递给浏览器访问的认证器。验证配置允许为给定的认证工作流程设置认证令牌的生存时间和用户验证要求设置。还有其他可用的配置选项。
 
-每个应用程序都有两种默认的 Attestation 配置，分别是 `step-up` 和 `sign-in`。它们分别作为认证的 `purpose` 在各自的客户端方法中使用。它们可以被编辑，如果被删除，将恢复到默认设置。Attestation 配置可以通过 [API](api.md#auth-configs) 或[管理控制台](admin-console/applications.md#authentication-configurations)访问。
+每个应用程序都有两种默认的验证配置，分别是 `step-up` 和 `sign-in`。它们分别作为认证的 `purpose` 在各自的客户端方法中使用。它们可以被编辑，如果被删除，将恢复到默认设置。验证配置可以通过 [API](api.md#auth-configs) 或[管理控制台](admin-console/applications.md#authentication-configurations)访问。
 
 ### 凭据提示 <a href="#credential-hints" id="credential-hints"></a>
 
