@@ -10,7 +10,7 @@ Passwordless.dev Android 客户端 SDK 使用户能够利用设备的内置指�
 
 * Android 9.0（API 级别 28）或更高版本
 * Java 8 或更高版本
-* [已完成「入门」指南](../../get-started.md)
+* [已完成「开始使用」指南](../../get-started.md)
 
 ## 安装 <a href="#installation" id="installation"></a>
 
@@ -285,7 +285,7 @@ _passwordless.login(alias) { success, exception, result ->
 
 ## 参考 <a href="#references" id="references"></a>
 
-* [入门 - Passwordless.dev](../../get-started.md)
+* [开始使用 - Passwordless.dev](../../get-started.md)
 * [使用您的后端集成 - Passwordless.dev](../../backend/)
 * [客户端身份验证 - Google](https://developers.google.com/android/guides/client-auth?hl=zh-cn)
 * [关联应用程序和网站 - Google](https://developers.google.com/identity/smartlock-passwords/android/associate-apps-and-sites?hl=zh-cn)
