@@ -6,7 +6,7 @@
 
 ## 示例：使用 SQL Server <a href="#example-using-sql-server" id="example-using-sql-server"></a>
 
-您的 docker-compose.yml 可能包含：
+您的 `docker-compose.yml` 可能包含：
 
 ```yaml
 ---

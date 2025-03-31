@@ -7,7 +7,7 @@
 ## 客户端库 <a href="#client-libraries" id="client-libraries"></a>
 
 * [Android](android/)
-* iOS
+* [iOS](ios.md)
 * [JavaScript](javascript.md)
 
 ## 框架示例 <a href="#framework-examples" id="framework-examples"></a>
